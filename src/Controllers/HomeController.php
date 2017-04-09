@@ -4,6 +4,8 @@ namespace ShavingShop\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ShavingShop\Models\User;
+use ShavingShop\Repositories\ArraySubscriptionsRepository;
 use Slim\Views\PhpRenderer;
 
 /**
@@ -31,6 +33,11 @@ class HomeController
      */
     public function start(RequestInterface $request, ResponseInterface $response)
     {
-        return $this->view->render($response, 'home.phtml');
+        $subsRepo = new ArraySubscriptionsRepository($_SESSION['data']['subscriptions'] ?? []);
+        $user = new User(1, $subsRepo);
+
+        return $this->view->render($response, 'home.phtml', [
+            'activeSubscription' => $user->getActiveSubscription()
+        ]);
     }
 }

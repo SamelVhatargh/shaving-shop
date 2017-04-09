@@ -1,8 +1,21 @@
+<?php
+use ShavingShop\Models\Subscription;
+
+/* @var Subscription $activeSubscription текущая подписка */
+?>
 <html>
 <head>
     <title>Сервис продажи бритвенных станков</title>
 </head>
 <body>
     <h1>Сервис продажи бритвенных станков</h1>
+
+    <?php if ($activeSubscription) : ?>
+    <h2>Текущая подписка:</h2>
+        <p>
+            <?php $product = $activeSubscription->getProduct(); ?>
+            <?= $product->name; ?> за <?= $product->cost; ?>$
+        </p>
+    <?php endif; ?>
 </body>
 </html>
