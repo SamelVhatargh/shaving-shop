@@ -3,6 +3,8 @@ namespace ShavingShop\Tests\Controllers;
 
 use ShavingShop\Controllers\HomeController;
 use PHPUnit\Framework\TestCase;
+use Slim\Container;
+use Slim\Views\PhpRenderer;
 
 class HomeControllerTest extends TestCase
 {
@@ -13,12 +15,17 @@ class HomeControllerTest extends TestCase
      */
     public function testShouldShowShavingShopLabelOnHomePage()
     {
-        $controller = new HomeController();
+        $container = new Container();
+        $container['view'] = function ($container) {
+            return new PhpRenderer(__DIR__ . '/../../src/views/');
+        };
+        $controller = new HomeController($container);
         $shopLabel = 'Сервис продажи бритвенных станков';
 
-        $controller->start();
+        $response = $controller->start($container->request, $container->response);
+        $response->getBody()->rewind();
 
-        $this->expectOutputRegex("/$shopLabel/");
+        $this->assertContains($shopLabel, $response->getBody()->getContents());
     }
     
 }
