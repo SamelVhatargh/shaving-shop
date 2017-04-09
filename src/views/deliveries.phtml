@@ -5,6 +5,7 @@ use ShavingShop\Models\Subscription;
 
 $cost = $activeSubscription->getProduct()->cost;
 $product = $activeSubscription->getProduct()->name;
+$totalCost = 0;
 ?>
 <html>
 <head>
@@ -20,7 +21,9 @@ $product = $activeSubscription->getProduct()->name;
         ); ?>
         <?php foreach ($dates as $date) : ?>
             <?= $date->format('d.m.Y'); ?> - <?= $cost; ?>$<br>
+            <?php $totalCost += $cost; ?>
         <?php endforeach; ?>
+        Итого потрачено: <?= $totalCost ?>$
     <?php endif; ?>
 </body>
 </html>
