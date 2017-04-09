@@ -1,6 +1,7 @@
 <?php
 namespace ShavingShop\Models;
 
+use ShavingShop\Models\Deliveries\DeliveryInterface;
 use ShavingShop\Utils\DateTime;
 
 /**
@@ -19,10 +20,16 @@ class Subscription
      */
     private $startDate;
 
-    public function __construct(Product $product, DateTime $startDate)
+    /**
+     * @var DeliveryInterface
+     */
+    private $delivery;
+
+    public function __construct(Product $product, DateTime $startDate, DeliveryInterface $delivery)
     {
         $this->product = $product;
         $this->startDate = $startDate;
+        $this->delivery = $delivery;
     }
 
     /**
@@ -50,5 +57,14 @@ class Subscription
     public function getStartDate(): DateTime
     {
         return $this->startDate;
+    }
+
+    /**
+     * Возвращает информацию о доставке
+     * @return DeliveryInterface
+     */
+    public function getDelivery(): DeliveryInterface
+    {
+        return $this->delivery;
     }
 }

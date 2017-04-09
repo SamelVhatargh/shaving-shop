@@ -1,6 +1,7 @@
 <?php
 namespace ShavingShop\Tests\Models;
 
+use ShavingShop\Models\Deliveries\OncePerMonthDelivery;
 use ShavingShop\Models\Product;
 use ShavingShop\Models\Subscription;
 use ShavingShop\Models\User;
@@ -18,7 +19,8 @@ class UserTest extends TestCase
     {
         $subscriptionFromRepository = new Subscription(
             new Product('Кружка', 100),
-            new DateTime()
+            new DateTime(),
+            new OncePerMonthDelivery(1)
         );
         $repository = $this->getMockBuilder(SubscriptionRepositoryInterface::class)
             ->getMock();
