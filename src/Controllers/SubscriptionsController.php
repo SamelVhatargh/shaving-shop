@@ -11,7 +11,7 @@ use Slim\Views\PhpRenderer;
 /**
  *
  */
-class HomeController
+class SubscriptionsController
 {
 
     /**
@@ -31,7 +31,7 @@ class HomeController
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function start(RequestInterface $request, ResponseInterface $response)
+    public function active(RequestInterface $request, ResponseInterface $response)
     {
         $subsRepo = new ArraySubscriptionsRepository($_SESSION['data']['subscriptions'] ?? []);
         $user = new User(1, $subsRepo);

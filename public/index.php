@@ -1,5 +1,5 @@
 <?php
-use ShavingShop\Controllers\HomeController;
+use ShavingShop\Controllers\SubscriptionsController;
 use Slim\App;
 use Slim\Views\PhpRenderer;
 
@@ -31,5 +31,5 @@ $container['view'] = function ($container) {
     return new PhpRenderer(__DIR__ . '/../src/views/');
 };
 
-$app->get('/', HomeController::class . ':start');
+$app->get('/', SubscriptionsController::class . ':active');
 $app->run();
