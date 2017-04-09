@@ -32,10 +32,11 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
     public function getActiveSubscriptionsForUser(User $user): ?Subscription
     {
         foreach ($this->data as $row) {
-            if (array_key_exists('user_id', $row)
-                && (int)$row['user_id'] === $user->getId()) {
-                if (array_key_exists('end_date', $row)
-                    && $row['end_date'] === null) {
+            if (!$this->isValid($row)) {
+                continue;
+            }
+            if ((int)$row['user_id'] === $user->getId()) {
+                if ($row['end_date'] === null) {
                     return new Subscription(new Product(
                         $row['name'],
                         $row['cost']
@@ -44,5 +45,21 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
             }
         }
         return null;
+    }
+
+    /**
+     * Проверяет валидна ли информация о подписке
+     * @param array $row информация о подписке
+     * @return bool
+     */
+    private function isValid(array $row): bool
+    {
+        $fields = ['user_id', 'end_date', 'name', 'cost'];
+        foreach ($fields as $field) {
+            if (!array_key_exists($field, $row)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
