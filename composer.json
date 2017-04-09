@@ -3,6 +3,7 @@
         "psr-4": {"ShavingShop\\": "src/"}
     },
     "require": {
+        "php": ">=7.1",
         "slim/slim": "^3.0",
         "slim/php-view": "^2.2"
     },
