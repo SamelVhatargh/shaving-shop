@@ -16,14 +16,17 @@ $totalCost = 0;
 
     <?php if ($activeSubscription) : ?>
     <h2>Предыдущие поставки "<?= $product; ?>"</h2>
-        <?php $dates = $activeSubscription->getDelivery()->getDeliveryDates(
-            $activeSubscription->getStartDate()
-        ); ?>
-        <?php foreach ($dates as $date) : ?>
-            <?= $date->format('d.m.Y'); ?> - <?= $cost; ?>$<br>
-            <?php $totalCost += $cost; ?>
-        <?php endforeach; ?>
-        Итого потрачено: <?= $totalCost ?>$
+        <p>
+            <?php $dates = $activeSubscription->getDelivery()->getDeliveryDates(
+                $activeSubscription->getStartDate()
+            ); ?>
+            <?php foreach ($dates as $date) : ?>
+                <?= $date->format('d.m.Y'); ?> - <?= $cost; ?>$<br>
+                <?php $totalCost += $cost; ?>
+            <?php endforeach; ?>
+            Итого потрачено: <?= $totalCost ?>$
+        </p>
     <?php endif; ?>
+    <a href="/">Активная подписка</a>
 </body>
 </html>
