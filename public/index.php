@@ -1,11 +1,14 @@
 <?php
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
+use ShavingShop\Controllers\HomeController;
 
 require '../vendor/autoload.php';
 
-$app = new \Slim\App();
-$app->get('/', function (Request $request, Response $response) {
-	echo '<h1>Сервис продажи бритвенных станков</h1>';
-});
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+$app->get('/', HomeController::class . ':start');
 $app->run();
