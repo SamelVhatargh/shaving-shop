@@ -15,5 +15,5 @@ interface SubscriptionRepositoryInterface
      * @param User $user
      * @return Subscription
      */
-    public function getActiveSubscriptionsForUser(User $user) : Subscription;
+    public function getActiveSubscriptionsForUser(User $user): ?Subscription;
 }

@@ -27,4 +27,22 @@ class UserTest extends TestCase
 
         $this->assertSame($subscriptionFromRepository, $subscription);
     }
+
+    /**
+     * Возвращать null если нет активной подписки
+     */
+    public function testGetActiveSubscriptionShouldReturnNullIfNoSubscriptionsInRepository()
+    {
+        $repository = $this->getMockBuilder(SubscriptionRepositoryInterface::class)
+            ->getMock();
+        $user = new User($repository);
+        $repository->expects($this->once())
+            ->method('getActiveSubscriptionsForUser')
+            ->with($user)
+            ->willReturn(null);
+
+        $subscription = $user->getActiveSubscription();
+
+        $this->assertNull($subscription);
+    }
 }

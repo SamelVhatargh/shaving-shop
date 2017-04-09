@@ -26,7 +26,7 @@ class User
     /**
      * Возвращает текущую подписку пользователя
      */
-    public function getActiveSubscription() : Subscription
+    public function getActiveSubscription(): ?Subscription
     {
         return $this->subscriptionRepository->getActiveSubscriptionsForUser($this);
     }
