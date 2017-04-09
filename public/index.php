@@ -2,6 +2,7 @@
 use ShavingShop\Controllers\SubscriptionsController;
 use Slim\App;
 use Slim\Views\PhpRenderer;
+use ShavingShop\Utils\DateTime;
 
 session_start();
 
@@ -18,6 +19,10 @@ $_SESSION['data']['subscriptions'] = [
 
 
 require '../vendor/autoload.php';
+
+if (isset($_GET['test_date'])) {
+    DateTime::setCurrentDate($_GET['test_date']);
+}
 
 $configuration = [
     'settings' => [
