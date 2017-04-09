@@ -1,0 +1,7 @@
+<phpunit>
+    <testsuites>
+        <testsuite name="shaving-shop">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
