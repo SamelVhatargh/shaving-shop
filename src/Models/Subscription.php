@@ -7,4 +7,12 @@ namespace ShavingShop\Models;
 class Subscription
 {
 
+    /**
+     * Является ли подписка активной
+     * @return bool
+     */
+    public function isActive()
+    {
+        return true;
+    }
 }
