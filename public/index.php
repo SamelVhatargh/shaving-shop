@@ -5,16 +5,15 @@ use Slim\Views\PhpRenderer;
 
 session_start();
 
-if (!isset($_SESSION['data'])) {
-    $_SESSION['data']['subscriptions'] = [
-        [
-            'name' => 'Бритвенный станок',
-            'cost' => '1',
-            'user_id' => '1',
-            'end_date' => null,
-        ]
-    ];
-}
+$_SESSION['data']['subscriptions'] = [
+    [
+        'name' => 'Бритвенный станок',
+        'cost' => '1',
+        'user_id' => '1',
+        'end_date' => null,
+        'start_date' => '2017-01-05 12:01:45',
+    ]
+];
 
 
 require '../vendor/autoload.php';

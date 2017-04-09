@@ -109,6 +109,7 @@ class ArraySubscriptionsRepositoryTest extends TestCase
             'cost' => 100,
             'user_id' => '1',
             'end_date' => null,
+            'start_date' => '2017-01-05 12:01:45',
         ], $row);
         $rep = new ArraySubscriptionsRepository([$row]);
         $user = new User($userId, $rep);

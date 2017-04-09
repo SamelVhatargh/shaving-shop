@@ -6,6 +6,7 @@ use ShavingShop\Models\Subscription;
 use ShavingShop\Models\User;
 use PHPUnit\Framework\TestCase;
 use ShavingShop\Repositories\SubscriptionRepositoryInterface;
+use ShavingShop\Utils\DateTime;
 
 class UserTest extends TestCase
 {
@@ -15,7 +16,10 @@ class UserTest extends TestCase
      */
     public function testGetActiveSubscriptionShouldReturnActiveSubscriptionFromRepository()
     {
-        $subscriptionFromRepository = new Subscription(new Product('Кружка', 100));
+        $subscriptionFromRepository = new Subscription(
+            new Product('Кружка', 100),
+            new DateTime()
+        );
         $repository = $this->getMockBuilder(SubscriptionRepositoryInterface::class)
             ->getMock();
         $user = new User(1, $repository);

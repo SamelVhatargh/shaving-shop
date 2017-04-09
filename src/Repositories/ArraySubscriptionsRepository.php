@@ -4,6 +4,7 @@ namespace ShavingShop\Repositories;
 use ShavingShop\Models\Product;
 use ShavingShop\Models\Subscription;
 use ShavingShop\Models\User;
+use ShavingShop\Utils\DateTime;
 
 /**
  * Репозиторий для получения инфы по подпискам из массива
@@ -37,10 +38,10 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
             }
             if ((int)$row['user_id'] === $user->getId()) {
                 if ($row['end_date'] === null) {
-                    return new Subscription(new Product(
-                        $row['name'],
-                        $row['cost']
-                    ));
+                    return new Subscription(
+                        new Product($row['name'], $row['cost']),
+                        new DateTime($row['start_date'])
+                    );
                 }
             }
         }
@@ -54,7 +55,7 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
      */
     private function isValid(array $row): bool
     {
-        $fields = ['user_id', 'end_date', 'name', 'cost'];
+        $fields = ['user_id', 'end_date', 'name', 'cost', 'start_date'];
         foreach ($fields as $field) {
             if (!array_key_exists($field, $row)) {
                 return false;

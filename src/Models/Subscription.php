@@ -1,6 +1,8 @@
 <?php
 namespace ShavingShop\Models;
 
+use ShavingShop\Utils\DateTime;
+
 /**
  * Модель подписки пользователя
  */
@@ -12,9 +14,15 @@ class Subscription
      */
     private $product;
 
-    public function __construct(Product $product)
+    /**
+     * @var DateTime
+     */
+    private $startDate;
+
+    public function __construct(Product $product, DateTime $startDate)
     {
         $this->product = $product;
+        $this->startDate = $startDate;
     }
 
     /**
@@ -33,5 +41,14 @@ class Subscription
     public function getProduct(): Product
     {
         return $this->product;
+    }
+
+    /**
+     * Возвращает дату начала подписки
+     * @return DateTime
+     */
+    public function getStartDate(): DateTime
+    {
+        return $this->startDate;
     }
 }
