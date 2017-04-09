@@ -17,13 +17,9 @@ class ArraySubscriptionsRepositoryTest extends TestCase
      * getActiveSubscriptionsForUser возвращает null если у пользователя нет активных подписок
      */
     public function testGetActiveSubscriptionsForUserShouldReturnNullIfUserHasNoActiveSubscriptions() {
-        $repWithExpiredSubscriptions = new ArraySubscriptionsRepository([
-            [
-                'user_id' => '1',
-                'end_date' => $this->getYesterday()->format('Y-m-d H:i:s'),
-            ],
+        list($repWithExpiredSubscriptions, $user) = $this->getRepAndUser([
+            'end_date' => $this->getYesterday()->format('Y-m-d H:i:s'),
         ]);
-        $user = new User(1, $repWithExpiredSubscriptions);
 
         $subscription = $repWithExpiredSubscriptions->getActiveSubscriptionsForUser($user);
 
@@ -34,15 +30,9 @@ class ArraySubscriptionsRepositoryTest extends TestCase
      * getActiveSubscriptionsForUser возвращает активную подписку если у пользователя есть подписка
      */
     public function testGetActiveSubscriptionsForUserShouldReturnActiveSubscriptionIfUserHasActiveSubscription() {
-        $repWithActiveSubscriptions = new ArraySubscriptionsRepository([
-            [
-                'name' => 'Кружка',
-                'cost' => 100,
-                'user_id' => '1',
-                'end_date' => null,
-            ],
+        list($repWithActiveSubscriptions, $user) = $this->getRepAndUser([
+            'end_date' => null,
         ]);
-        $user = new User(1, $repWithActiveSubscriptions);
 
         $subscription = $repWithActiveSubscriptions->getActiveSubscriptionsForUser($user);
 
@@ -70,15 +60,11 @@ class ArraySubscriptionsRepositoryTest extends TestCase
      * активные подписки, но они для других пользователей
      */
     public function testGetActiveSubscriptionsForUserShouldReturnNullIfArrayContainsActiveSubscriptionsButNotForThisUser() {
-        $repWithInvalidArray = new ArraySubscriptionsRepository([
-            [
-                'user_id' => '2',
-                'end_date' => null,
-            ],
-        ]);
-        $user = new User(1, $repWithInvalidArray);
+        list($repWithSubsFromAnotherUser, $user) = $this->getRepAndUser([
+            'user_id' => '2',
+        ], 1);
 
-        $subscription = $repWithInvalidArray->getActiveSubscriptionsForUser($user);
+        $subscription = $repWithSubsFromAnotherUser->getActiveSubscriptionsForUser($user);
 
         $this->assertNull($subscription);
     }
@@ -89,17 +75,12 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     public function testGetActiveSubscriptionsForUserShouldReturnSubscriptionWithProductInfo() {
         $productName = 'Кружка';
         $productCost = 100;
-        $repWithInvalidArray = new ArraySubscriptionsRepository([
-            [
-                'name' => 'Кружка',
-                'cost' => 100,
-                'user_id' => '1',
-                'end_date' => null,
-            ],
+        list($repository, $user) = $this->getRepAndUser([
+            'name' => $productName,
+            'cost' => $productCost,
         ]);
-        $user = new User(1, $repWithInvalidArray);
 
-        $subscription = $repWithInvalidArray->getActiveSubscriptionsForUser($user);
+        $subscription = $repository->getActiveSubscriptionsForUser($user);
         $subscriptionProduct = $subscription->getProduct();
 
         $this->assertSame($productName, $subscriptionProduct->name);
@@ -113,6 +94,25 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     private function getYesterday()
     {
         return DateTime::now()->sub(new DateInterval('P1D'));
+    }
+
+    /**
+     * Возвращает репозиторий и модель пользователя с данными по умолчанию
+     * @param array $row новые данные для возвращаемой подписки
+     * @param int $userId айди возвращаемого пользователя
+     * @return array
+     */
+    private function getRepAndUser(array $row = [], int $userId = 1): array
+    {
+        $row = array_merge([
+            'name' => 'Кружка',
+            'cost' => 100,
+            'user_id' => '1',
+            'end_date' => null,
+        ], $row);
+        $rep = new ArraySubscriptionsRepository([$row]);
+        $user = new User($userId, $rep);
+        return array($rep, $user);
     }
 }
 
