@@ -36,6 +36,8 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     public function testGetActiveSubscriptionsForUserShouldReturnActiveSubscriptionIfUserHasActiveSubscription() {
         $repWithActiveSubscriptions = new ArraySubscriptionsRepository([
             [
+                'name' => 'Кружка',
+                'cost' => 100,
                 'user_id' => '1',
                 'end_date' => null,
             ],
@@ -79,6 +81,29 @@ class ArraySubscriptionsRepositoryTest extends TestCase
         $subscription = $repWithInvalidArray->getActiveSubscriptionsForUser($user);
 
         $this->assertNull($subscription);
+    }
+
+    /**
+     * Информация о продукте должна возвращаться вместе с подпиской
+     */
+    public function testGetActiveSubscriptionsForUserShouldReturnSubscriptionWithProductInfo() {
+        $productName = 'Кружка';
+        $productCost = 100;
+        $repWithInvalidArray = new ArraySubscriptionsRepository([
+            [
+                'name' => 'Кружка',
+                'cost' => 100,
+                'user_id' => '1',
+                'end_date' => null,
+            ],
+        ]);
+        $user = new User(1, $repWithInvalidArray);
+
+        $subscription = $repWithInvalidArray->getActiveSubscriptionsForUser($user);
+        $subscriptionProduct = $subscription->getProduct();
+
+        $this->assertSame($productName, $subscriptionProduct->name);
+        $this->assertSame($productCost, $subscriptionProduct->cost);
     }
 
     /**

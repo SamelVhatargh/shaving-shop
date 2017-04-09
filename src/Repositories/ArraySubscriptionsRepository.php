@@ -1,6 +1,7 @@
 <?php
 namespace ShavingShop\Repositories;
 
+use ShavingShop\Models\Product;
 use ShavingShop\Models\Subscription;
 use ShavingShop\Models\User;
 
@@ -35,7 +36,10 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
                 && (int)$row['user_id'] === $user->getId()) {
                 if (array_key_exists('end_date', $row)
                     && $row['end_date'] === null) {
-                    return new Subscription();
+                    return new Subscription(new Product(
+                        $row['name'],
+                        $row['cost']
+                    ));
                 }
             }
         }

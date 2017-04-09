@@ -1,6 +1,7 @@
 <?php
 namespace ShavingShop\Tests\Models;
 
+use ShavingShop\Models\Product;
 use ShavingShop\Models\Subscription;
 use ShavingShop\Models\User;
 use PHPUnit\Framework\TestCase;
@@ -14,7 +15,7 @@ class UserTest extends TestCase
      */
     public function testGetActiveSubscriptionShouldReturnActiveSubscriptionFromRepository()
     {
-        $subscriptionFromRepository = new Subscription();
+        $subscriptionFromRepository = new Subscription(new Product('Кружка', 100));
         $repository = $this->getMockBuilder(SubscriptionRepositoryInterface::class)
             ->getMock();
         $user = new User(1, $repository);
