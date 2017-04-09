@@ -1,0 +1,26 @@
+<?php
+use ShavingShop\Models\Subscription;
+
+/* @var Subscription $activeSubscription текущая подписка */
+
+$cost = $activeSubscription->getProduct()->cost;
+$product = $activeSubscription->getProduct()->name;
+?>
+<html>
+<head>
+    <title>Сервис продажи бритвенных станков</title>
+</head>
+<body>
+    <h1>Сервис продажи бритвенных станков</h1>
+
+    <?php if ($activeSubscription) : ?>
+    <h2>Предыдущие поставки "<?= $product; ?>"</h2>
+        <?php $dates = $activeSubscription->getDelivery()->getDeliveryDates(
+            $activeSubscription->getStartDate()
+        ); ?>
+        <?php foreach ($dates as $date) : ?>
+            <?= $date->format('d.m.Y'); ?> - <?= $cost; ?>$<br>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</body>
+</html>

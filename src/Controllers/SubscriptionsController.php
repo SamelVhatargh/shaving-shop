@@ -40,4 +40,20 @@ class SubscriptionsController
             'activeSubscription' => $user->getActiveSubscription()
         ]);
     }
+
+    /**
+     * История доставок
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
+    public function history(RequestInterface $request, ResponseInterface $response)
+    {
+        $subsRepo = new ArraySubscriptionsRepository($_SESSION['data']['subscriptions'] ?? []);
+        $user = new User(1, $subsRepo);
+
+        return $this->view->render($response, 'deliveries.phtml', [
+            'activeSubscription' => $user->getActiveSubscription()
+        ]);
+    }
 }

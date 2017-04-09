@@ -32,4 +32,5 @@ $container['view'] = function ($container) {
 };
 
 $app->get('/', SubscriptionsController::class . ':active');
+$app->get('/history', SubscriptionsController::class . ':history');
 $app->run();

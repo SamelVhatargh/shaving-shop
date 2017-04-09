@@ -22,5 +22,5 @@ interface DeliveryInterface
      * @param DateTime $endDate конец периода
      * @return DateTime[]
      */
-    public function getDeliveryDates(DateTime $startDate, ?DateTime $endDate): array;
+    public function getDeliveryDates(DateTime $startDate, DateTime $endDate = null): array;
 }
