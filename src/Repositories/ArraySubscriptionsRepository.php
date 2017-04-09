@@ -31,9 +31,12 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
     public function getActiveSubscriptionsForUser(User $user): ?Subscription
     {
         foreach ($this->data as $row) {
-            if (array_key_exists('end_date', $row)
-                && $row['end_date'] === null) {
-                return new Subscription();
+            if (array_key_exists('user_id', $row)
+                && (int)$row['user_id'] === $user->getId()) {
+                if (array_key_exists('end_date', $row)
+                    && $row['end_date'] === null) {
+                    return new Subscription();
+                }
             }
         }
         return null;

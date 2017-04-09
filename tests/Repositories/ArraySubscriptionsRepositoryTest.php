@@ -19,10 +19,11 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     public function testGetActiveSubscriptionsForUserShouldReturnNullIfUserHasNoActiveSubscriptions() {
         $repWithExpiredSubscriptions = new ArraySubscriptionsRepository([
             [
+                'user_id' => '1',
                 'end_date' => $this->getYesterday()->format('Y-m-d H:i:s'),
             ],
         ]);
-        $user = new User($repWithExpiredSubscriptions);
+        $user = new User(1, $repWithExpiredSubscriptions);
 
         $subscription = $repWithExpiredSubscriptions->getActiveSubscriptionsForUser($user);
 
@@ -35,10 +36,11 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     public function testGetActiveSubscriptionsForUserShouldReturnActiveSubscriptionIfUserHasActiveSubscription() {
         $repWithActiveSubscriptions = new ArraySubscriptionsRepository([
             [
+                'user_id' => '1',
                 'end_date' => null,
             ],
         ]);
-        $user = new User($repWithActiveSubscriptions);
+        $user = new User(1, $repWithActiveSubscriptions);
 
         $subscription = $repWithActiveSubscriptions->getActiveSubscriptionsForUser($user);
 
@@ -54,7 +56,25 @@ class ArraySubscriptionsRepositoryTest extends TestCase
                 'endDate' => null,
             ],
         ]]);
-        $user = new User($repWithInvalidArray);
+        $user = new User(1, $repWithInvalidArray);
+
+        $subscription = $repWithInvalidArray->getActiveSubscriptionsForUser($user);
+
+        $this->assertNull($subscription);
+    }
+
+    /**
+     * getActiveSubscriptionsForUser возвращает null если в массиве есть
+     * активные подписки, но они для других пользователей
+     */
+    public function testGetActiveSubscriptionsForUserShouldReturnNullIfArrayContainsActiveSubscriptionsButNotForThisUser() {
+        $repWithInvalidArray = new ArraySubscriptionsRepository([
+            [
+                'user_id' => '2',
+                'end_date' => null,
+            ],
+        ]);
+        $user = new User(1, $repWithInvalidArray);
 
         $subscription = $repWithInvalidArray->getActiveSubscriptionsForUser($user);
 

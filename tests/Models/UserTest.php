@@ -17,7 +17,7 @@ class UserTest extends TestCase
         $subscriptionFromRepository = new Subscription();
         $repository = $this->getMockBuilder(SubscriptionRepositoryInterface::class)
             ->getMock();
-        $user = new User($repository);
+        $user = new User(1, $repository);
         $repository->expects($this->once())
             ->method('getActiveSubscriptionsForUser')
             ->with($user)
@@ -35,7 +35,7 @@ class UserTest extends TestCase
     {
         $repository = $this->getMockBuilder(SubscriptionRepositoryInterface::class)
             ->getMock();
-        $user = new User($repository);
+        $user = new User(1, $repository);
         $repository->expects($this->once())
             ->method('getActiveSubscriptionsForUser')
             ->with($user)
