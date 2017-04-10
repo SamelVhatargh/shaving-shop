@@ -3,9 +3,6 @@ use ShavingShop\Models\Subscription;
 
 /* @var Subscription $activeSubscription текущая подписка */
 
-$cost = $activeSubscription->getProduct()->cost;
-$product = $activeSubscription->getProduct()->name;
-$totalCost = 0;
 ?>
 <html>
 <head>
@@ -15,6 +12,11 @@ $totalCost = 0;
     <h1>Сервис продажи бритвенных станков</h1>
 
     <?php if ($activeSubscription) : ?>
+    <?php
+    $cost = $activeSubscription->getProduct()->cost;
+    $product = $activeSubscription->getProduct()->name;
+    $totalCost = 0;
+    ?>
     <h2>Предыдущие поставки "<?= $product; ?>"</h2>
         <p>
             <?php $dates = $activeSubscription->getDelivery()->getDeliveryDates(
