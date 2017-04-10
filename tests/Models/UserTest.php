@@ -89,9 +89,8 @@ class UserTest extends TestCase
     private function createSubscription(): Subscription
     {
         return new Subscription(
-            new Product('Кружка', 100),
-            new SubscriptionPeriod(new DateTime()),
-            new OncePerMonthDelivery(1)
+            1, new Product('Кружка', 100),
+            new SubscriptionPeriod(new DateTime()), new OncePerMonthDelivery(1)
         );
     }
 }

@@ -25,11 +25,26 @@ class Subscription
      */
     private $delivery;
 
-    public function __construct(Product $product, SubscriptionPeriod $period, DeliveryInterface $delivery)
+    /**
+     * @var int
+     */
+    private $id;
+
+    public function __construct(int $id, Product $product, SubscriptionPeriod $period, DeliveryInterface $delivery)
     {
         $this->product = $product;
         $this->period = $period;
         $this->delivery = $delivery;
+        $this->id = $id;
+    }
+
+    /**
+     * Возвращает идентификатор подписки
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**

@@ -40,12 +40,12 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
             }
             if ((int)$row['user_id'] === $user->getId()) {
                 $subscription = new Subscription(
+                    $row['id'],
                     new Product($row['name'], $row['cost']),
                     new SubscriptionPeriod(
                         new DateTime($row['start_date']),
                         $row['end_date'] === null ? null : new DateTime($row['end_date'])
-                    ),
-                    new OncePerMonthDelivery($row['delivery_day'])
+                    ), new OncePerMonthDelivery($row['delivery_day'])
                 );
 
                 if ($subscription->isActive()) {
@@ -63,7 +63,7 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
      */
     private function isValid(array $row): bool
     {
-        $fields = ['user_id', 'end_date', 'name', 'cost', 'start_date', 'delivery_day'];
+        $fields = ['id', 'user_id', 'end_date', 'name', 'cost', 'start_date', 'delivery_day'];
         foreach ($fields as $field) {
             if (!array_key_exists($field, $row)) {
                 return false;

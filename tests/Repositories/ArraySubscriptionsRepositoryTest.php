@@ -105,6 +105,7 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     private function getRepAndUser(array $row = [], int $userId = 1): array
     {
         $row = array_merge([
+            'id' => 1,
             'name' => 'Кружка',
             'cost' => 100,
             'user_id' => '1',

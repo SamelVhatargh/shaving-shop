@@ -8,6 +8,7 @@ session_start();
 
 $_SESSION['data']['subscriptions'] = [
     [
+        'id' => 1,
         'name' => 'Бритвенный станок',
         'cost' => '1',
         'user_id' => '1',

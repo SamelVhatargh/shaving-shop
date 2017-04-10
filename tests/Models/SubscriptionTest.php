@@ -22,7 +22,7 @@ class SubscriptionTest extends TestCase
     public function testIsActive($startDate, $endDate, $isActive)
     {
         $subscription = new Subscription(
-            new Product('Кружка', 100),
+            1, new Product('Кружка', 100),
             new SubscriptionPeriod($startDate, $endDate),
             new OncePerMonthDelivery(1)
         );
