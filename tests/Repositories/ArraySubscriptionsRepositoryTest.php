@@ -106,6 +106,18 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     }
 
     /**
+     * Получение подписки по айди
+     */
+    public function testGetByIdShouldReturnSubscriptionWithRequestedId()
+    {
+        list($rep, $user) = $this->getRepAndUser(['id' => '2']);
+
+        $subscription = $rep->getById(2);
+
+        $this->assertSame(2, $subscription->getId());
+    }
+
+    /**
      * Возвращает вчерашнюю дату
      * @return DateTime
      */

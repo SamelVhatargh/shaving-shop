@@ -46,6 +46,21 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
     }
 
     /**
+     * Возвращает подписку по идентификатору
+     * @param int $id
+     * @return Subscription
+     */
+    public function getById(int $id): ?Subscription
+    {
+        foreach ($this->data as $row) {
+            if ((int)$row['id'] === $id) {
+                return SubscriptionFactory::createByRow($row);
+            }
+        }
+        return null;
+    }
+
+    /**
      * Проверяет валидна ли информация о подписке
      * @param array $row информация о подписке
      * @return bool
