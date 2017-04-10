@@ -41,6 +41,15 @@ class User
     }
 
     /**
+     * Возвращает все подписки пользователя
+     * @return Subscription[]
+     */
+    public function getSubscriptions(): array
+    {
+        return $this->subscriptionRepository->getSubscriptionsForUser($this);
+    }
+
+    /**
      * Возвращает айди пользователя
      * @return int
      */

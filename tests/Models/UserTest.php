@@ -51,6 +51,43 @@ class UserTest extends TestCase
     }
 
     /**
+     * Получение всех подписок из репозитория
+     */
+    public function testGetSubscriptionsShouldReturnSubscriptionsArrayFromRepository()
+    {
+        $subscriptionFromRepository = $this->createSubscription();
+        $repository = $this->getMockBuilder(SubscriptionRepositoryInterface::class)
+            ->getMock();
+        $user = new User(1, $repository);
+        $repository->expects($this->once())
+            ->method('getSubscriptionsForUser')
+            ->with($user)
+            ->willReturn([$subscriptionFromRepository]);
+
+        $subscriptions = $user->getSubscriptions();
+
+        $this->assertSame([$subscriptionFromRepository], $subscriptions);
+    }
+
+    /**
+     * Возвращать null если нет активной подписки
+     */
+    public function testGetSubscriptionsShouldReturnEmptyArrayIfNoSubscriptionsInRepository()
+    {
+        $repository = $this->getMockBuilder(SubscriptionRepositoryInterface::class)
+            ->getMock();
+        $user = new User(1, $repository);
+        $repository->expects($this->once())
+            ->method('getSubscriptionsForUser')
+            ->with($user)
+            ->willReturn([]);
+
+        $subscriptions = $user->getSubscriptions();
+
+        $this->assertCount(0, $subscriptions);
+    }
+
+    /**
      * После отмены подписка должна стать неактивной
      */
     public function testCancelSubscriptionShouldMakeSubscriptionInactive()

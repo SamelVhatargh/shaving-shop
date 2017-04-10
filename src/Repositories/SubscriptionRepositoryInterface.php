@@ -17,6 +17,12 @@ interface SubscriptionRepositoryInterface
      */
     public function getActiveSubscriptionsForUser(User $user): ?Subscription;
 
+    /**
+     * Возвращает все подписки пользователя
+     * @param User $user
+     * @return Subscription[]
+     */
+    public function getSubscriptionsForUser(User $user): array;
 
     /**
      * Сохраняет подписку в хранилище

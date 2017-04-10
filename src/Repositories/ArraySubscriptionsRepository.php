@@ -110,4 +110,14 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
     {
         return $this->data;
     }
+
+    /**
+     * Возвращает все подписки пользователя
+     * @param User $user
+     * @return Subscription[]
+     */
+    public function getSubscriptionsForUser(User $user): array
+    {
+        // TODO: Implement getSubscriptionsForUser() method.
+    }
 }
