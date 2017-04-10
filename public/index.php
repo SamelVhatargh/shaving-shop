@@ -6,7 +6,8 @@ use ShavingShop\Utils\DateTime;
 
 session_start();
 
-if (!isset($_SESSION['data'])) {
+function restore(): void
+{
     $_SESSION['data']['subscriptions'] = [
         [
             'id' => 1,
@@ -18,6 +19,10 @@ if (!isset($_SESSION['data'])) {
             'delivery_day' => '3',
         ]
     ];
+}
+
+if (!isset($_SESSION['data'])) {
+    restore();
 }
 
 require '../vendor/autoload.php';
@@ -41,4 +46,5 @@ $container['view'] = function ($container) {
 $app->get('/', SubscriptionsController::class . ':active');
 $app->get('/history', SubscriptionsController::class . ':history');
 $app->get('/clear/{id}', SubscriptionsController::class . ':clear');
+$app->get('/restore', SubscriptionsController::class . ':restore');
 $app->run();

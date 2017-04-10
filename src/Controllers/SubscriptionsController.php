@@ -82,4 +82,10 @@ class SubscriptionsController
         }
         return $response->withRedirect('/', 301);
     }
+
+    public function restore(RequestInterface $request, ResponseInterface $response, $args)
+    {
+        restore();
+        return $response->withRedirect('/', 301);
+    }
 }
