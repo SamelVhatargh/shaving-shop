@@ -21,6 +21,10 @@ use ShavingShop\Models\Subscription;
             <br>
             <a href="/clear/<?= $activeSubscription->getId(); ?>">Отменить подписку</a>
         </p>
+    <?php else : ?>
+        <p>
+            У вас нет активных подписок
+        </p>
     <?php endif; ?>
     <a href="/history">Предыдущие поставки</a>
 </body>
