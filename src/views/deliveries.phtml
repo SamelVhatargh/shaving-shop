@@ -20,7 +20,8 @@ use ShavingShop\Models\Subscription;
     <h2>Предыдущие поставки "<?= $product; ?>"</h2>
         <p>
             <?php $dates = $subscription->getDelivery()->getDeliveryDates(
-                $subscription->getPeriod()->getStartDate()
+                $subscription->getPeriod()->getStartDate(),
+                $subscription->getPeriod()->getEndDate()
             ); ?>
             <?php foreach ($dates as $date) : ?>
                 <?= $date->format('d.m.Y'); ?> - <?= $cost; ?>$<br>
