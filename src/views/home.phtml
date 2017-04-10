@@ -16,7 +16,7 @@ use ShavingShop\Models\Subscription;
             <?php $product = $activeSubscription->getProduct(); ?>
             <?= $product->name; ?> за <?= $product->cost; ?>$
             <?= $activeSubscription->getDelivery()->getDescription(); ?>
-            начиная с <?= $activeSubscription->getStartDate()->format('d.m.Y'); ?>
+            начиная с <?= $activeSubscription->getPeriod()->getStartDate()->format('d.m.Y'); ?>
         </p>
     <?php endif; ?>
     <a href="/history">Предыдущие поставки</a>

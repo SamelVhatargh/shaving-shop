@@ -4,6 +4,7 @@ namespace ShavingShop\Repositories;
 use ShavingShop\Models\Deliveries\OncePerMonthDelivery;
 use ShavingShop\Models\Product;
 use ShavingShop\Models\Subscription;
+use ShavingShop\Models\SubscriptionPeriod;
 use ShavingShop\Models\User;
 use ShavingShop\Utils\DateTime;
 
@@ -41,7 +42,10 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
                 if ($row['end_date'] === null) {
                     return new Subscription(
                         new Product($row['name'], $row['cost']),
-                        new DateTime($row['start_date']),
+                        new SubscriptionPeriod(
+                            new DateTime($row['start_date']),
+                            $row['end_date'] === null ? null : new DateTime($row['end_date'])
+                        ),
                         new OncePerMonthDelivery($row['delivery_day'])
                     );
                 }

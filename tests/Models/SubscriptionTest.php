@@ -6,6 +6,7 @@ use ShavingShop\Models\Deliveries\OncePerMonthDelivery;
 use ShavingShop\Models\Product;
 use ShavingShop\Models\Subscription;
 use PHPUnit\Framework\TestCase;
+use ShavingShop\Models\SubscriptionPeriod;
 use ShavingShop\Utils\DateTime;
 
 /**
@@ -22,9 +23,8 @@ class SubscriptionTest extends TestCase
     {
         $subscription = new Subscription(
             new Product('Кружка', 100),
-            $startDate,
-            new OncePerMonthDelivery(1),
-            $endDate
+            new SubscriptionPeriod($startDate, $endDate),
+            new OncePerMonthDelivery(1)
         );
 
         $this->assertSame($isActive, $subscription->isActive());

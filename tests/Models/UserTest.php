@@ -4,6 +4,7 @@ namespace ShavingShop\Tests\Models;
 use ShavingShop\Models\Deliveries\OncePerMonthDelivery;
 use ShavingShop\Models\Product;
 use ShavingShop\Models\Subscription;
+use ShavingShop\Models\SubscriptionPeriod;
 use ShavingShop\Models\User;
 use PHPUnit\Framework\TestCase;
 use ShavingShop\Repositories\SubscriptionRepositoryInterface;
@@ -89,7 +90,7 @@ class UserTest extends TestCase
     {
         return new Subscription(
             new Product('Кружка', 100),
-            new DateTime(),
+            new SubscriptionPeriod(new DateTime()),
             new OncePerMonthDelivery(1)
         );
     }

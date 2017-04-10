@@ -16,26 +16,20 @@ class Subscription
     private $product;
 
     /**
-     * @var DateTime
+     * @var SubscriptionPeriod
      */
-    private $startDate;
+    private $period;
 
     /**
      * @var DeliveryInterface
      */
     private $delivery;
 
-    /**
-     * @var DateTime
-     */
-    private $endDate;
-
-    public function __construct(Product $product, DateTime $startDate, DeliveryInterface $delivery, DateTime $endDate = null)
+    public function __construct(Product $product, SubscriptionPeriod $period, DeliveryInterface $delivery)
     {
         $this->product = $product;
-        $this->startDate = $startDate;
+        $this->period = $period;
         $this->delivery = $delivery;
-        $this->endDate = $endDate;
     }
 
     /**
@@ -45,7 +39,9 @@ class Subscription
     public function isActive()
     {
         $now = DateTime::now();
-        return $this->startDate <= $now && ($this->endDate === null || $now < $this->endDate);
+        $startDate = $this->period->getStartDate();
+        $endDate = $this->period->getEndDate();
+        return $startDate <= $now && ($endDate === null || $now < $endDate);
     }
 
     /**
@@ -58,15 +54,6 @@ class Subscription
     }
 
     /**
-     * Возвращает дату начала подписки
-     * @return DateTime
-     */
-    public function getStartDate(): DateTime
-    {
-        return $this->startDate;
-    }
-
-    /**
      * Возвращает информацию о доставке
      * @return DeliveryInterface
      */
@@ -76,11 +63,20 @@ class Subscription
     }
 
     /**
+     * Возвращает период подписки
+     * @return SubscriptionPeriod
+     */
+    public function getPeriod(): SubscriptionPeriod
+    {
+        return $this->period;
+    }
+
+    /**
      * Устанавливает время окончания подписки
      * @param DateTime $dateTime
      */
     public function setEndDate(DateTime $dateTime)
     {
-        $this->endDate = $dateTime;
+        $this->period->setEndDate($dateTime);
     }
 }
