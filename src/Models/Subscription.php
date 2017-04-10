@@ -25,11 +25,17 @@ class Subscription
      */
     private $delivery;
 
-    public function __construct(Product $product, DateTime $startDate, DeliveryInterface $delivery)
+    /**
+     * @var DateTime
+     */
+    private $endDate;
+
+    public function __construct(Product $product, DateTime $startDate, DeliveryInterface $delivery, DateTime $endDate = null)
     {
         $this->product = $product;
         $this->startDate = $startDate;
         $this->delivery = $delivery;
+        $this->endDate = $endDate;
     }
 
     /**
@@ -38,7 +44,8 @@ class Subscription
      */
     public function isActive()
     {
-        return true;
+        $now = DateTime::now();
+        return $this->startDate <= $now && ($this->endDate === null || $now < $this->endDate);
     }
 
     /**
