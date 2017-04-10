@@ -74,4 +74,13 @@ class Subscription
     {
         return $this->delivery;
     }
+
+    /**
+     * Устанавливает время окончания подписки
+     * @param DateTime $dateTime
+     */
+    public function setEndDate(DateTime $dateTime)
+    {
+        $this->endDate = $dateTime;
+    }
 }

@@ -17,11 +17,7 @@ class UserTest extends TestCase
      */
     public function testGetActiveSubscriptionShouldReturnActiveSubscriptionFromRepository()
     {
-        $subscriptionFromRepository = new Subscription(
-            new Product('Кружка', 100),
-            new DateTime(),
-            new OncePerMonthDelivery(1)
-        );
+        $subscriptionFromRepository = $this->createSubscription();
         $repository = $this->getMockBuilder(SubscriptionRepositoryInterface::class)
             ->getMock();
         $user = new User(1, $repository);
@@ -51,5 +47,33 @@ class UserTest extends TestCase
         $subscription = $user->getActiveSubscription();
 
         $this->assertNull($subscription);
+    }
+
+    /**
+     * После отмены подписка должна стать неактивной
+     */
+    public function testCancelSubscriptionShouldMakeSubscriptionInactive()
+    {
+        $subscription = $this->createSubscription();
+        $repository = $this->getMockBuilder(SubscriptionRepositoryInterface::class)
+            ->getMock();
+        $user = new User(1, $repository);
+
+        $user->cancelSubscription($subscription);
+
+        $this->assertFalse($subscription->isActive());
+    }
+
+    /**
+     * Возвращать базовую подписку для тестов
+     * @return Subscription
+     */
+    private function createSubscription(): Subscription
+    {
+        return new Subscription(
+            new Product('Кружка', 100),
+            new DateTime(),
+            new OncePerMonthDelivery(1)
+        );
     }
 }

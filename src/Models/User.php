@@ -2,6 +2,7 @@
 namespace ShavingShop\Models;
 
 use ShavingShop\Repositories\SubscriptionRepositoryInterface;
+use ShavingShop\Utils\DateTime;
 
 /**
  * Модель пользователя
@@ -46,5 +47,14 @@ class User
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * Отменяет подписку пользователя
+     * @param Subscription $subscription подписка
+     */
+    public function cancelSubscription(Subscription $subscription)
+    {
+        $subscription->setEndDate(DateTime::now());
     }
 }
