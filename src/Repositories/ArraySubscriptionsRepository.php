@@ -118,6 +118,15 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
      */
     public function getSubscriptionsForUser(User $user): array
     {
-        // TODO: Implement getSubscriptionsForUser() method.
+        $result = [];
+        foreach ($this->data as $row) {
+            if (!$this->isValid($row)) {
+                continue;
+            }
+            if ((int)$row['user_id'] === $user->getId()) {
+                $result[] = SubscriptionFactory::createByRow($row);
+            }
+        }
+        return $result;
     }
 }

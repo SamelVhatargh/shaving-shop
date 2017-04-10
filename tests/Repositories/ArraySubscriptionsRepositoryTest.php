@@ -118,6 +118,25 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     }
 
     /**
+     * getSubscriptionsForUser() должен возвращать подписки пользователя
+     */
+    public function testGetSubscriptionsForUserShouldReturnUserSubscriptions()
+    {
+        $cupSubscriptionData = $this->getCupSubscriptionData();
+        $data = [$cupSubscriptionData];
+        $cupSubscriptionData['user_id'] = '2';
+        $data[] = $cupSubscriptionData;
+        $rep = new ArraySubscriptionsRepository($data);
+        $user = new User(1, $rep);
+
+        $subscriptions = $rep->getSubscriptionsForUser($user);
+
+        foreach ($subscriptions as $subscription) {
+            $this->assertSame(1, $subscription->getId());
+        }
+    }
+
+    /**
      * Возвращает вчерашнюю дату
      * @return DateTime
      */
