@@ -17,6 +17,9 @@ use ShavingShop\Models\Subscription;
             <?= $product->name; ?> за <?= $product->cost; ?>$
             <?= $activeSubscription->getDelivery()->getDescription(); ?>
             начиная с <?= $activeSubscription->getPeriod()->getStartDate()->format('d.m.Y'); ?>
+
+            <br>
+            <a href="/clear/<?= $activeSubscription->getId(); ?>">Отменить подписку</a>
         </p>
     <?php endif; ?>
     <a href="/history">Предыдущие поставки</a>

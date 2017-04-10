@@ -20,9 +20,23 @@ class SubscriptionsController
      */
     protected $view;
 
+    /**
+     * @var ArraySubscriptionsRepository
+     */
+    private $subsRepo;
+
+    /**
+     * @var User
+     */
+    private $user;
+
     public function __construct(ContainerInterface $container)
     {
         $this->view = $container->get('view');
+        $this->subsRepo = new ArraySubscriptionsRepository(
+            $_SESSION['data']['subscriptions'] ?? []
+        );
+        $this->user = new User(1, $this->subsRepo);
     }
 
     /**
@@ -34,11 +48,8 @@ class SubscriptionsController
      */
     public function active(RequestInterface $request, ResponseInterface $response)
     {
-        $subsRepo = new ArraySubscriptionsRepository($_SESSION['data']['subscriptions'] ?? []);
-        $user = new User(1, $subsRepo);
-
         return $this->view->render($response, 'home.phtml', [
-            'activeSubscription' => $user->getActiveSubscription()
+            'activeSubscription' => $this->user->getActiveSubscription()
         ]);
     }
 
@@ -50,11 +61,25 @@ class SubscriptionsController
      */
     public function history(RequestInterface $request, ResponseInterface $response)
     {
-        $subsRepo = new ArraySubscriptionsRepository($_SESSION['data']['subscriptions'] ?? []);
-        $user = new User(1, $subsRepo);
-
         return $this->view->render($response, 'deliveries.phtml', [
-            'activeSubscription' => $user->getActiveSubscription()
+            'activeSubscription' => $this->user->getActiveSubscription()
         ]);
+    }
+
+    /**
+     * Отмена подписки
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     */
+    public function clear(RequestInterface $request, ResponseInterface $response, $args)
+    {
+        $subscriptionId = $args['id'];
+        $subscription = $this->subsRepo->getById($subscriptionId);
+
+        if ($subscription !== null) {
+            $this->user->cancelSubscription($subscription);
+            $_SESSION['data']['subscriptions'] = $this->subsRepo->getData();
+        }
+        return $response->withRedirect('/', 301);
     }
 }

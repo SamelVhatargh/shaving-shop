@@ -6,18 +6,19 @@ use ShavingShop\Utils\DateTime;
 
 session_start();
 
-$_SESSION['data']['subscriptions'] = [
-    [
-        'id' => 1,
-        'name' => 'Бритвенный станок',
-        'cost' => '1',
-        'user_id' => '1',
-        'end_date' => null,
-        'start_date' => '2017-01-05 12:01:45',
-        'delivery_day' => '3',
-    ]
-];
-
+if (!isset($_SESSION['data'])) {
+    $_SESSION['data']['subscriptions'] = [
+        [
+            'id' => 1,
+            'name' => 'Бритвенный станок',
+            'cost' => '1',
+            'user_id' => '1',
+            'end_date' => null,
+            'start_date' => '2017-01-05 12:01:45',
+            'delivery_day' => '3',
+        ]
+    ];
+}
 
 require '../vendor/autoload.php';
 
@@ -39,4 +40,5 @@ $container['view'] = function ($container) {
 
 $app->get('/', SubscriptionsController::class . ':active');
 $app->get('/history', SubscriptionsController::class . ':history');
+$app->get('/clear/{id}', SubscriptionsController::class . ':clear');
 $app->run();
