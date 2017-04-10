@@ -65,4 +65,14 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
         }
         return true;
     }
+
+    /**
+     * Сохраняет подписку в хранилище
+     * @param Subscription $subscription подписка
+     * @return bool результат сохранения
+     */
+    public function save(Subscription $subscription): bool
+    {
+        return false;
+    }
 }

@@ -56,5 +56,6 @@ class User
     public function cancelSubscription(Subscription $subscription)
     {
         $subscription->setEndDate(DateTime::now());
+        $this->subscriptionRepository->save($subscription);
     }
 }

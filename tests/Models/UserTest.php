@@ -65,6 +65,23 @@ class UserTest extends TestCase
     }
 
     /**
+     * После отмена инфа об отмене сохраняется в хранилище
+     */
+    public function testCancelSubscriptionShouldSaveStateInRepository()
+    {
+        $subscription = $this->createSubscription();
+        $repository = $this->getMockBuilder(SubscriptionRepositoryInterface::class)
+            ->getMock();
+        $user = new User(1, $repository);
+
+        $repository->expects($this->once())
+            ->method('save')
+            ->with($subscription);
+
+        $user->cancelSubscription($subscription);
+    }
+
+    /**
      * Возвращать базовую подписку для тестов
      * @return Subscription
      */
