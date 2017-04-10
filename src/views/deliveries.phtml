@@ -1,7 +1,7 @@
 <?php
 use ShavingShop\Models\Subscription;
 
-/* @var Subscription $activeSubscription текущая подписка */
+/* @var Subscription[] $subscriptions текущая подписка */
 
 ?>
 <html>
@@ -11,16 +11,16 @@ use ShavingShop\Models\Subscription;
 <body>
     <h1>Сервис продажи бритвенных станков</h1>
 
-    <?php if ($activeSubscription) : ?>
+    <?php foreach ($subscriptions as $subscription) : ?>
     <?php
-    $cost = $activeSubscription->getProduct()->cost;
-    $product = $activeSubscription->getProduct()->name;
+    $cost = $subscription->getProduct()->cost;
+    $product = $subscription->getProduct()->name;
     $totalCost = 0;
     ?>
     <h2>Предыдущие поставки "<?= $product; ?>"</h2>
         <p>
-            <?php $dates = $activeSubscription->getDelivery()->getDeliveryDates(
-                $activeSubscription->getPeriod()->getStartDate()
+            <?php $dates = $subscription->getDelivery()->getDeliveryDates(
+                $subscription->getPeriod()->getStartDate()
             ); ?>
             <?php foreach ($dates as $date) : ?>
                 <?= $date->format('d.m.Y'); ?> - <?= $cost; ?>$<br>
@@ -28,7 +28,7 @@ use ShavingShop\Models\Subscription;
             <?php endforeach; ?>
             Итого потрачено: <?= $totalCost ?>$
         </p>
-    <?php endif; ?>
+    <?php endforeach; ?>
     <a href="/">Активная подписка</a>
 </body>
 </html>

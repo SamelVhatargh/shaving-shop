@@ -62,7 +62,7 @@ class SubscriptionsController
     public function history(RequestInterface $request, ResponseInterface $response)
     {
         return $this->view->render($response, 'deliveries.phtml', [
-            'activeSubscription' => $this->user->getActiveSubscription()
+            'subscriptions' => $this->user->getSubscriptions()
         ]);
     }
 
