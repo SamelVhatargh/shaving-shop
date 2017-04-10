@@ -39,15 +39,17 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
                 continue;
             }
             if ((int)$row['user_id'] === $user->getId()) {
-                if ($row['end_date'] === null) {
-                    return new Subscription(
-                        new Product($row['name'], $row['cost']),
-                        new SubscriptionPeriod(
-                            new DateTime($row['start_date']),
-                            $row['end_date'] === null ? null : new DateTime($row['end_date'])
-                        ),
-                        new OncePerMonthDelivery($row['delivery_day'])
-                    );
+                $subscription = new Subscription(
+                    new Product($row['name'], $row['cost']),
+                    new SubscriptionPeriod(
+                        new DateTime($row['start_date']),
+                        $row['end_date'] === null ? null : new DateTime($row['end_date'])
+                    ),
+                    new OncePerMonthDelivery($row['delivery_day'])
+                );
+
+                if ($subscription->isActive()) {
+                    return $subscription;
                 }
             }
         }
