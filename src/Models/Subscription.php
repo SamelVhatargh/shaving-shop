@@ -30,12 +30,32 @@ class Subscription
      */
     private $id;
 
-    public function __construct(int $id, Product $product, SubscriptionPeriod $period, DeliveryInterface $delivery)
-    {
+    /**
+     * @var int
+     */
+    private $userId;
+
+    public function __construct(
+        int $id,
+        Product $product,
+        SubscriptionPeriod $period,
+        DeliveryInterface $delivery,
+        int $userId
+    ) {
         $this->product = $product;
         $this->period = $period;
         $this->delivery = $delivery;
         $this->id = $id;
+        $this->userId = $userId;
+    }
+
+    /**
+     * Возвращает айди привязанного пользователя
+     * @return int
+     */
+    public function getUserId(): int
+    {
+        return $this->userId;
     }
 
     /**

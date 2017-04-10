@@ -73,6 +73,7 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
                 $endDate = $subscription->getPeriod()->getEndDate();
                 $row = [
                     'id' => $subscription->getId(),
+                    'user_id' => $subscription->getUserId(),
                     'end_date' => $endDate === null ? null : $endDate->format('Y-m-d H:i:s'),
                     'name' => $subscription->getProduct()->name,
                     'cost' => $subscription->getProduct()->cost,

@@ -16,12 +16,13 @@ class SubscriptionFactory
     public static function createByRow(array $row): Subscription
     {
         return new Subscription(
-            $row['id'],
-            new Product($row['name'], $row['cost']),
+            $row['id'], new Product($row['name'], $row['cost']),
             new SubscriptionPeriod(
                 new DateTime($row['start_date']),
                 $row['end_date'] === null ? null : new DateTime($row['end_date'])
-            ), new OncePerMonthDelivery($row['delivery_day'])
+            ),
+            new OncePerMonthDelivery($row['delivery_day']),
+            $row['user_id']
         );
     }
 }

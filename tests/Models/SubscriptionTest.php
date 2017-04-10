@@ -24,7 +24,8 @@ class SubscriptionTest extends TestCase
         $subscription = new Subscription(
             1, new Product('Кружка', 100),
             new SubscriptionPeriod($startDate, $endDate),
-            new OncePerMonthDelivery(1)
+            new OncePerMonthDelivery(1),
+            1
         );
 
         $this->assertSame($isActive, $subscription->isActive());

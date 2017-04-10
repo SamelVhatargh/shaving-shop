@@ -90,7 +90,8 @@ class UserTest extends TestCase
     {
         return new Subscription(
             1, new Product('Кружка', 100),
-            new SubscriptionPeriod(new DateTime()), new OncePerMonthDelivery(1)
+            new SubscriptionPeriod(new DateTime()), new OncePerMonthDelivery(1),
+            1
         );
     }
 }
