@@ -1,12 +1,9 @@
 <?php
 namespace ShavingShop\Repositories;
 
-use ShavingShop\Models\Deliveries\OncePerMonthDelivery;
-use ShavingShop\Models\Product;
 use ShavingShop\Models\Subscription;
-use ShavingShop\Models\SubscriptionPeriod;
+use ShavingShop\Models\SubscriptionFactory;
 use ShavingShop\Models\User;
-use ShavingShop\Utils\DateTime;
 
 /**
  * Репозиторий для получения инфы по подпискам из массива
@@ -39,15 +36,7 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
                 continue;
             }
             if ((int)$row['user_id'] === $user->getId()) {
-                $subscription = new Subscription(
-                    $row['id'],
-                    new Product($row['name'], $row['cost']),
-                    new SubscriptionPeriod(
-                        new DateTime($row['start_date']),
-                        $row['end_date'] === null ? null : new DateTime($row['end_date'])
-                    ), new OncePerMonthDelivery($row['delivery_day'])
-                );
-
+                $subscription = SubscriptionFactory::createByRow($row);
                 if ($subscription->isActive()) {
                     return $subscription;
                 }
@@ -79,6 +68,30 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
      */
     public function save(Subscription $subscription): bool
     {
+        foreach ($this->data as &$row) {
+            if ((int)$row['id'] === $subscription->getId()) {
+                $endDate = $subscription->getPeriod()->getEndDate();
+                $row = [
+                    'id' => $subscription->getId(),
+                    'end_date' => $endDate === null ? null : $endDate->format('Y-m-d H:i:s'),
+                    'name' => $subscription->getProduct()->name,
+                    'cost' => $subscription->getProduct()->cost,
+                    'start_date' => $subscription->getPeriod()->getStartDate()->format('Y-m-d H:i:s'),
+                    'delivery_day' => $subscription->getDelivery()->getDeliveryDay(),
+                ];
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    /**
+     * Возвращает последнюю версию данных в массиве
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->data;
     }
 }

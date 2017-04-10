@@ -67,4 +67,13 @@ class OncePerMonthDelivery implements DeliveryInterface
         }
         return $dates;
     }
+
+    /**
+     * Возвращает день доставки
+     * @return int
+     */
+    public function getDeliveryDay(): int
+    {
+        return $this->day;
+    }
 }

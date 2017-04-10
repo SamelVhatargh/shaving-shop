@@ -23,4 +23,10 @@ interface DeliveryInterface
      * @return DateTime[]
      */
     public function getDeliveryDates(DateTime $startDate, DateTime $endDate = null): array;
+
+    /**
+     * Возвращает день доставки
+     * @return int
+     */
+    public function getDeliveryDay(): int;
 }

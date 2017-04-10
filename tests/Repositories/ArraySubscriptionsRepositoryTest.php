@@ -2,6 +2,7 @@
 namespace ShavingShop\Tests\Repositories;
 
 use DateInterval;
+use ShavingShop\Models\SubscriptionFactory;
 use ShavingShop\Models\User;
 use ShavingShop\Repositories\ArraySubscriptionsRepository;
 use PHPUnit\Framework\TestCase;
@@ -88,6 +89,23 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     }
 
     /**
+     * Сохранение информации о подписке
+     */
+    public function testSaveShouldStoreNewInfoInArray()
+    {
+        $cupSubscriptionData = $this->getCupSubscriptionData();
+        $data = [$cupSubscriptionData];
+        $subscription = SubscriptionFactory::createByRow($cupSubscriptionData);
+        $rep = new ArraySubscriptionsRepository($data);
+        $newEndDate = '2015-03-03 20:20:20';
+
+        $subscription->setEndDate(new DateTime($newEndDate));
+        $rep->save($subscription);
+
+        $this->assertSame($newEndDate, $rep->getData()[0]['end_date']);
+    }
+
+    /**
      * Возвращает вчерашнюю дату
      * @return DateTime
      */
@@ -104,7 +122,19 @@ class ArraySubscriptionsRepositoryTest extends TestCase
      */
     private function getRepAndUser(array $row = [], int $userId = 1): array
     {
-        $row = array_merge([
+        $rows = [array_merge($this->getCupSubscriptionData(), $row)];
+        $rep = new ArraySubscriptionsRepository($rows);
+        $user = new User($userId, $rep);
+        return array($rep, $user);
+    }
+
+    /**
+     * Возвращает информацию о подписке на кружку
+     * @return array
+     */
+    private function getCupSubscriptionData(): array
+    {
+        return [
             'id' => 1,
             'name' => 'Кружка',
             'cost' => 100,
@@ -112,10 +142,7 @@ class ArraySubscriptionsRepositoryTest extends TestCase
             'end_date' => null,
             'start_date' => '2017-01-05 12:01:45',
             'delivery_day' => '1',
-        ], $row);
-        $rep = new ArraySubscriptionsRepository([$row]);
-        $user = new User($userId, $rep);
-        return array($rep, $user);
+        ];
     }
 }
 
