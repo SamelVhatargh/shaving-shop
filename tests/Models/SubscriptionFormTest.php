@@ -96,6 +96,20 @@ class SubscriptionFormTest extends TestCase
     }
 
     /**
+     * Модель подписки созданная формой не должна иметь дату окончания
+     */
+    public function testCreatedSubscriptionShouldNotHaveEndDate()
+    {
+        $form = $this->createForm();
+
+        $subscription = $form->createSubscription();
+
+        $this->assertNull(
+            $subscription->getPeriod()->getEndDate()
+        );
+    }
+
+    /**
      * @return SubscriptionForm
      */
     private function createForm(): SubscriptionForm
