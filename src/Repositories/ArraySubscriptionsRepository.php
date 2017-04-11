@@ -90,30 +90,14 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
                     $maxId = (int)$row['id'];
                 }
             }
-            $endDate = $subscription->getPeriod()->getEndDate();
-            $this->data[] = [
-                'id' => $maxId + 1,
-                'user_id' => $subscription->getUserId(),
-                'end_date' => $endDate === null ? null : $endDate->format('Y-m-d H:i:s'),
-                'name' => $subscription->getProduct()->name,
-                'cost' => $subscription->getProduct()->cost,
-                'start_date' => $subscription->getPeriod()->getStartDate()->format('Y-m-d H:i:s'),
-                'delivery_day' => $subscription->getDelivery()->getDeliveryDay(),
-            ];
+            $row = $this->convertSubscriptionToRow($subscription);
+            $row['id'] = $maxId + 1;
+            $this->data[] = $row;
         }
 
         foreach ($this->data as &$row) {
             if ((int)$row['id'] === $subscription->getId()) {
-                $endDate = $subscription->getPeriod()->getEndDate();
-                $row = [
-                    'id' => $subscription->getId(),
-                    'user_id' => $subscription->getUserId(),
-                    'end_date' => $endDate === null ? null : $endDate->format('Y-m-d H:i:s'),
-                    'name' => $subscription->getProduct()->name,
-                    'cost' => $subscription->getProduct()->cost,
-                    'start_date' => $subscription->getPeriod()->getStartDate()->format('Y-m-d H:i:s'),
-                    'delivery_day' => $subscription->getDelivery()->getDeliveryDay(),
-                ];
+                $row = $this->convertSubscriptionToRow($subscription);
                 return true;
             }
         }
@@ -147,5 +131,24 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
             }
         }
         return $result;
+    }
+
+    /**
+     * @param Subscription $subscription
+     * @return array
+     */
+    private function convertSubscriptionToRow(Subscription $subscription): array
+    {
+        $endDate = $subscription->getPeriod()->getEndDate();
+        $row = [
+            'id' => $subscription->getId(),
+            'user_id' => $subscription->getUserId(),
+            'end_date' => $endDate === null ? null : $endDate->format('Y-m-d H:i:s'),
+            'name' => $subscription->getProduct()->name,
+            'cost' => $subscription->getProduct()->cost,
+            'start_date' => $subscription->getPeriod()->getStartDate()->format('Y-m-d H:i:s'),
+            'delivery_day' => $subscription->getDelivery()->getDeliveryDay(),
+        ];
+        return $row;
     }
 }
