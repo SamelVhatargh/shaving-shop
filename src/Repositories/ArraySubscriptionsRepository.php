@@ -84,9 +84,15 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
     public function save(Subscription $subscription): bool
     {
         if ($subscription->getId() === null) {
+            $maxId = 0;
+            foreach ($this->data as $row) {
+                if ((int)$row['id'] > $maxId) {
+                    $maxId = (int)$row['id'];
+                }
+            }
             $endDate = $subscription->getPeriod()->getEndDate();
             $this->data[] = [
-                'id' => $subscription->getId(),
+                'id' => $maxId + 1,
                 'user_id' => $subscription->getUserId(),
                 'end_date' => $endDate === null ? null : $endDate->format('Y-m-d H:i:s'),
                 'name' => $subscription->getProduct()->name,

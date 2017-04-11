@@ -143,12 +143,46 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     {
         $rep = new ArraySubscriptionsRepository([]);
         $subscriptionData = $this->getCupSubscriptionData();
+        $newSubscriptionData = $subscriptionData;
+        $newSubscriptionData['id'] = null;
+        $subscription = SubscriptionFactory::createByRow($newSubscriptionData);
+
+        $rep->save($subscription);
+
+        $this->assertEquals([$subscriptionData], $rep->getData());
+    }
+
+    /**
+     * Новая подписка должны быть сохранена с id = 1 если в хранилище совсем нет подписок
+     */
+    public function testNewSubscriptionShouldBeSavedWithIdEqualsTo1IfThereAreNoOtherSubscriptions()
+    {
+        $rep = new ArraySubscriptionsRepository([]);
+        $subscriptionData = $this->getCupSubscriptionData();
         $subscriptionData['id'] = null;
         $subscription = SubscriptionFactory::createByRow($subscriptionData);
 
         $rep->save($subscription);
 
-        $this->assertEquals([$subscriptionData], $rep->getData());
+        $this->assertEquals(1, $rep->getData()[0]['id']);
+    }
+
+    /**
+     * Новая подписка должны быть сохранена с maxId + 1, где maxId - максимальный
+     * айди из всех подписок хранилища
+     */
+    public function testNewSubscriptionShouldBeSavedWithIdEqualsToIncrementOfMaxIdFromStoredSubscriptions()
+    {
+        $maxId = 2;
+        $subscriptionData = $this->getCupSubscriptionData();
+        $subscriptionData['id'] = $maxId;
+        $rep = new ArraySubscriptionsRepository([$subscriptionData]);
+        $subscriptionData['id'] = null;
+        $subscription = SubscriptionFactory::createByRow($subscriptionData);
+
+        $rep->save($subscription);
+
+        $this->assertEquals($maxId + 1, $rep->getData()[1]['id']);
     }
 
     /**
