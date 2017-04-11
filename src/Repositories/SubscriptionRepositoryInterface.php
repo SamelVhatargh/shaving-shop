@@ -30,4 +30,11 @@ interface SubscriptionRepositoryInterface
      * @return bool результат сохранения
      */
     public function save(Subscription $subscription): bool;
+
+    /**
+     * Возвращает подписку по идентификатору
+     * @param int $id
+     * @return Subscription
+     */
+    public function getById(int $id): ?Subscription;
 }
