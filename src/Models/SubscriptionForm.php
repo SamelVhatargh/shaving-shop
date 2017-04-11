@@ -20,6 +20,11 @@ class SubscriptionForm
     private $user;
 
     /**
+     * @var bool
+     */
+    private $submitted = false;
+
+    /**
      * SubscriptionForm constructor.
      * @param User $user
      */
@@ -38,6 +43,17 @@ class SubscriptionForm
         if ($request->isPost()) {
             $data = $request->getParsedBodyParam('Subscription', false);
             $this->deliveryDay = $data['day'] ?? '';
+
+            $this->submitted = true;
         }
+    }
+
+    /**
+     * Была ли отправлена форма
+     * @return bool
+     */
+    public function isSubmitted(): bool
+    {
+        return $this->submitted;
     }
 }
