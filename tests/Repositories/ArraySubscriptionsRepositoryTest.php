@@ -2,6 +2,7 @@
 namespace ShavingShop\Tests\Repositories;
 
 use DateInterval;
+use ShavingShop\Models\Subscription;
 use ShavingShop\Models\SubscriptionFactory;
 use ShavingShop\Models\User;
 use ShavingShop\Repositories\ArraySubscriptionsRepository;
@@ -142,14 +143,15 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     public function testNewSubscriptionShouldBeSavedAsNewArrayItem()
     {
         $rep = new ArraySubscriptionsRepository([]);
-        $subscriptionData = $this->getCupSubscriptionData();
-        $newSubscriptionData = $subscriptionData;
-        $newSubscriptionData['id'] = null;
-        $subscription = SubscriptionFactory::createByRow($newSubscriptionData);
+        $newSubscription = $this->createNewSubscription();
 
-        $rep->save($subscription);
+        $rep->save($newSubscription);
 
-        $this->assertEquals([$subscriptionData], $rep->getData());
+        $saveSubscriptions = $rep->getData();
+        $this->assertEquals(
+            $this->getCupSubscriptionData(),
+            end($saveSubscriptions)
+        );
     }
 
     /**
@@ -158,12 +160,12 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     public function testNewSubscriptionShouldBeSavedWithIdEqualsTo1IfThereAreNoOtherSubscriptions()
     {
         $rep = new ArraySubscriptionsRepository([]);
-        $subscriptionData = $this->getCupSubscriptionData(['id' => null]);
-        $subscription = SubscriptionFactory::createByRow($subscriptionData);
+        $newSubscription = $this->createNewSubscription();
 
-        $rep->save($subscription);
+        $rep->save($newSubscription);
 
-        $this->assertEquals(1, $rep->getData()[0]['id']);
+        $saveSubscriptions = $rep->getData();
+        $this->assertEquals(1, end($saveSubscriptions)['id']);
     }
 
     /**
@@ -173,15 +175,15 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     public function testNewSubscriptionShouldBeSavedWithIdEqualsToIncrementOfMaxIdFromStoredSubscriptions()
     {
         $maxId = 2;
-        $subscriptionData = $this->getCupSubscriptionData(['id' => $maxId]);
-        $rep = new ArraySubscriptionsRepository([$subscriptionData]);
-        $newSubscriptionData = $subscriptionData;
-        $newSubscriptionData['id'] = null;
-        $subscription = SubscriptionFactory::createByRow($newSubscriptionData);
+        $rep = new ArraySubscriptionsRepository(
+            [$this->getCupSubscriptionData(['id' => $maxId])]
+        );
+        $newSubscription = $this->createNewSubscription();
 
-        $rep->save($subscription);
+        $rep->save($newSubscription);
 
-        $this->assertEquals($maxId + 1, $rep->getData()[1]['id']);
+        $saveSubscriptions = $rep->getData();
+        $this->assertEquals($maxId + 1, end($saveSubscriptions)['id']);
     }
 
     /**
@@ -223,6 +225,17 @@ class ArraySubscriptionsRepositoryTest extends TestCase
             'start_date' => '2017-01-05 12:01:45',
             'delivery_day' => '1',
         ], $row);
+    }
+
+    /**
+     * Возвращает модель свежесозданной подписки
+     * @return Subscription
+     */
+    private function createNewSubscription(): Subscription
+    {
+        $data = $this->getCupSubscriptionData(['id' => null]);
+        $newSubscription = SubscriptionFactory::createByRow($data);
+        return $newSubscription;
     }
 }
 
