@@ -6,6 +6,7 @@ use ShavingShop\Models\SubscriptionForm;
 use PHPUnit\Framework\TestCase;
 use ShavingShop\Models\User;
 use ShavingShop\Repositories\SubscriptionRepositoryInterface;
+use ShavingShop\Utils\DateTime;
 use Slim\Http\Request;
 
 /**
@@ -74,6 +75,23 @@ class SubscriptionFormTest extends TestCase
         $this->assertEquals(
             $form->deliveryDay,
             $subscription->getDelivery()->getDeliveryDay()
+        );
+    }
+
+    /**
+     * Модель подписки созданная формой должна иметь сегодняшюю дату в качестве
+     * даты начала подписки
+     */
+    public function testCreatedSubscriptionShouldHaveTodayAsStartDate()
+    {
+        $form = $this->createForm();
+        $now = DateTime::now();
+
+        $subscription = $form->createSubscription();
+
+        $this->assertEquals(
+            $now->format('Y-m-d H:i:s'),
+            $subscription->getPeriod()->getStartDate()->format('Y-m-d H:i:s')
         );
     }
 
