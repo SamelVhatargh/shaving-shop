@@ -137,6 +137,21 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     }
 
     /**
+     * Новая подписка должны быть добавлена в массив
+     */
+    public function testNewSubscriptionShouldBeSavedAsNewArrayItem()
+    {
+        $rep = new ArraySubscriptionsRepository([]);
+        $subscriptionData = $this->getCupSubscriptionData();
+        $subscriptionData['id'] = null;
+        $subscription = SubscriptionFactory::createByRow($subscriptionData);
+
+        $rep->save($subscription);
+
+        $this->assertEquals([$subscriptionData], $rep->getData());
+    }
+
+    /**
      * Возвращает вчерашнюю дату
      * @return DateTime
      */

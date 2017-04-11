@@ -83,6 +83,19 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
      */
     public function save(Subscription $subscription): bool
     {
+        if ($subscription->getId() === null) {
+            $endDate = $subscription->getPeriod()->getEndDate();
+            $this->data[] = [
+                'id' => $subscription->getId(),
+                'user_id' => $subscription->getUserId(),
+                'end_date' => $endDate === null ? null : $endDate->format('Y-m-d H:i:s'),
+                'name' => $subscription->getProduct()->name,
+                'cost' => $subscription->getProduct()->cost,
+                'start_date' => $subscription->getPeriod()->getStartDate()->format('Y-m-d H:i:s'),
+                'delivery_day' => $subscription->getDelivery()->getDeliveryDay(),
+            ];
+        }
+
         foreach ($this->data as &$row) {
             if ((int)$row['id'] === $subscription->getId()) {
                 $endDate = $subscription->getPeriod()->getEndDate();
