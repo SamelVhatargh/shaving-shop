@@ -62,6 +62,22 @@ class SubscriptionFormTest extends TestCase
     }
 
     /**
+     * Модель подписки созданная формой должна содержать значения с формы
+     */
+    public function testCreateSubscriptionShouldReturnSubscriptionModelBasedOnFormFields()
+    {
+        $form = $this->createForm();
+        $form->deliveryDay = '2';
+
+        $subscription = $form->createSubscription();
+
+        $this->assertEquals(
+            $form->deliveryDay,
+            $subscription->getDelivery()->getDeliveryDay()
+        );
+    }
+
+    /**
      * @return SubscriptionForm
      */
     private function createForm(): SubscriptionForm

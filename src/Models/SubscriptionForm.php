@@ -1,6 +1,7 @@
 <?php
 namespace ShavingShop\Models;
 
+use ShavingShop\Utils\DateTime;
 use Slim\Http\Request;
 
 /**
@@ -55,5 +56,23 @@ class SubscriptionForm
     public function isSubmitted(): bool
     {
         return $this->submitted;
+    }
+
+    /**
+     * Возвращает модель подписки
+     * @return Subscription
+     */
+    public function createSubscription(): Subscription
+    {
+        $subscription = SubscriptionFactory::createByRow([
+            'id' => null,
+            'name' => 'Бритвенный станок станок',
+            'cost' => '1',
+            'start_date' => DateTime::now()->format('Y-m-d H:i:s'),
+            'end_date' => null,
+            'delivery_day' => $this->deliveryDay,
+            'user_id' => $this->user->getId(),
+        ]);
+        return $subscription;
     }
 }

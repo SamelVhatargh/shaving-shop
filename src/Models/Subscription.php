@@ -36,7 +36,7 @@ class Subscription
     private $userId;
 
     public function __construct(
-        int $id,
+        ?int $id,
         Product $product,
         SubscriptionPeriod $period,
         DeliveryInterface $delivery,
