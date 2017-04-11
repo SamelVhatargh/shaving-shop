@@ -84,25 +84,9 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
     public function save(Subscription $subscription): bool
     {
         if ($subscription->getId() === null) {
-            $maxId = 0;
-            foreach ($this->data as $row) {
-                if ((int)$row['id'] > $maxId) {
-                    $maxId = (int)$row['id'];
-                }
-            }
-            $row = $this->convertSubscriptionToRow($subscription);
-            $row['id'] = $maxId + 1;
-            $this->data[] = $row;
+            return $this->create($subscription);
         }
-
-        foreach ($this->data as &$row) {
-            if ((int)$row['id'] === $subscription->getId()) {
-                $row = $this->convertSubscriptionToRow($subscription);
-                return true;
-            }
-        }
-
-        return false;
+        return $this->update($subscription);
     }
 
     /**
@@ -150,5 +134,40 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
             'delivery_day' => $subscription->getDelivery()->getDeliveryDay(),
         ];
         return $row;
+    }
+
+    /**
+     * Добавляет новую подписку
+     * @param Subscription $subscription
+     * @return bool
+     */
+    private function create(Subscription $subscription): bool
+    {
+        $maxId = 0;
+        foreach ($this->data as $row) {
+            if ((int)$row['id'] > $maxId) {
+                $maxId = (int)$row['id'];
+            }
+        }
+        $row = $this->convertSubscriptionToRow($subscription);
+        $row['id'] = $maxId + 1;
+        $this->data[] = $row;
+        return true;
+    }
+
+    /**
+     * Обновляет информацию о подписке
+     * @param Subscription $subscription
+     * @return bool
+     */
+    private function update(Subscription $subscription): bool
+    {
+        foreach ($this->data as &$row) {
+            if ((int)$row['id'] === $subscription->getId()) {
+                $row = $this->convertSubscriptionToRow($subscription);
+                return true;
+            }
+        }
+        return false;
     }
 }
