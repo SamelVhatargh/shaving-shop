@@ -47,4 +47,6 @@ $app->get('/', SubscriptionsController::class . ':active');
 $app->get('/history', SubscriptionsController::class . ':history');
 $app->get('/clear/{id}', SubscriptionsController::class . ':clear');
 $app->get('/restore', SubscriptionsController::class . ':restore');
+$app->get('/create', SubscriptionsController::class . ':create');
+$app->post('/create', SubscriptionsController::class . ':create');
 $app->run();

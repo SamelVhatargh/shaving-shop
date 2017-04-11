@@ -4,6 +4,7 @@ namespace ShavingShop\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ShavingShop\Models\SubscriptionForm;
 use ShavingShop\Models\User;
 use ShavingShop\Repositories\ArraySubscriptionsRepository;
 use ShavingShop\Utils\DateTime;
@@ -78,14 +79,44 @@ class SubscriptionsController
 
         if ($subscription !== null) {
             $this->user->cancelSubscription($subscription);
-            $_SESSION['data']['subscriptions'] = $this->subsRepo->getData();
+            $this->updateSessionStorage();
         }
         return $response->withRedirect('/', 301);
+    }
+
+    /**
+     * Отображает форму создания подписки и сохраняет ее если нужно
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
+    public function create(RequestInterface $request, ResponseInterface $response)
+    {
+        $form = new SubscriptionForm($this->user);
+
+        $form->populateFromPostRequest($request);
+        if ($form->isSubmitted()) {
+            $this->subsRepo->save($form->createSubscription());
+            $this->updateSessionStorage();
+            return $response->withRedirect('/', 301);
+        }
+
+        return $this->view->render($response, 'create.phtml', [
+            'form' =>$form
+        ]);
     }
 
     public function restore(RequestInterface $request, ResponseInterface $response, $args)
     {
         restore();
         return $response->withRedirect('/', 301);
+    }
+
+    /**
+     * Обновляет сессию свежими данными о подписках
+     */
+    private function updateSessionStorage(): void
+    {
+        $_SESSION['data']['subscriptions'] = $this->subsRepo->getData();
     }
 }

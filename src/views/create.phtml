@@ -1,0 +1,32 @@
+<?php
+use ShavingShop\Models\SubscriptionForm;
+
+/* @var SubscriptionForm $form */
+?>
+<html>
+<head>
+    <title>Сервис продажи бритвенных станков</title>
+</head>
+<body>
+    <h1>Сервис продажи бритвенных станков</h1>
+
+    <h2>Добавление подписки:</h2>
+    <form method="post">
+        <label for="product">Товар:</label>
+        <select id="product" name="Subscription[product]">
+            <option>Бритвенный станок - 1$</option>
+        </select>
+        <br>
+        <label for="delivery">Доставка:</label>
+        <select id="delivery" name="Subscription[delivery]">
+            <option>Один раз в месяц</option>
+        </select>
+        <br>
+        <label for="day">День:</label><input id="day" name="Subscription[day]" value="<?= $form->deliveryDay; ?>">
+        <br>
+        <input type="submit" value="Оформить подписку">
+    </form>
+    <br>
+    <a href="/">Назад</a>
+</body>
+</html>
