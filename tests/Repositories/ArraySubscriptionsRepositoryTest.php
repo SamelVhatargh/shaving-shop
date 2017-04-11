@@ -158,8 +158,7 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     public function testNewSubscriptionShouldBeSavedWithIdEqualsTo1IfThereAreNoOtherSubscriptions()
     {
         $rep = new ArraySubscriptionsRepository([]);
-        $subscriptionData = $this->getCupSubscriptionData();
-        $subscriptionData['id'] = null;
+        $subscriptionData = $this->getCupSubscriptionData(['id' => null]);
         $subscription = SubscriptionFactory::createByRow($subscriptionData);
 
         $rep->save($subscription);
@@ -174,11 +173,11 @@ class ArraySubscriptionsRepositoryTest extends TestCase
     public function testNewSubscriptionShouldBeSavedWithIdEqualsToIncrementOfMaxIdFromStoredSubscriptions()
     {
         $maxId = 2;
-        $subscriptionData = $this->getCupSubscriptionData();
-        $subscriptionData['id'] = $maxId;
+        $subscriptionData = $this->getCupSubscriptionData(['id' => $maxId]);
         $rep = new ArraySubscriptionsRepository([$subscriptionData]);
-        $subscriptionData['id'] = null;
-        $subscription = SubscriptionFactory::createByRow($subscriptionData);
+        $newSubscriptionData = $subscriptionData;
+        $newSubscriptionData['id'] = null;
+        $subscription = SubscriptionFactory::createByRow($newSubscriptionData);
 
         $rep->save($subscription);
 
@@ -202,7 +201,7 @@ class ArraySubscriptionsRepositoryTest extends TestCase
      */
     private function getRepAndUser(array $row = [], int $userId = 1): array
     {
-        $rows = [array_merge($this->getCupSubscriptionData(), $row)];
+        $rows = [$this->getCupSubscriptionData($row)];
         $rep = new ArraySubscriptionsRepository($rows);
         $user = new User($userId, $rep);
         return array($rep, $user);
@@ -210,11 +209,12 @@ class ArraySubscriptionsRepositoryTest extends TestCase
 
     /**
      * Возвращает информацию о подписке на кружку
+     * @param array $row поле => значение для подмены базовых данных
      * @return array
      */
-    private function getCupSubscriptionData(): array
+    private function getCupSubscriptionData(array $row = []): array
     {
-        return [
+        return array_merge([
             'id' => 1,
             'name' => 'Кружка',
             'cost' => 100,
@@ -222,7 +222,7 @@ class ArraySubscriptionsRepositoryTest extends TestCase
             'end_date' => null,
             'start_date' => '2017-01-05 12:01:45',
             'delivery_day' => '1',
-        ];
+        ], $row);
     }
 }
 
