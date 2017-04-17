@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use ShavingShop\Models\SubscriptionForm;
 use ShavingShop\Models\User;
 use ShavingShop\Repositories\ArraySubscriptionsRepository;
+use ShavingShop\Repositories\FixedProductsRepository;
 use ShavingShop\Utils\DateTime;
 use Slim\Views\PhpRenderer;
 
@@ -31,12 +32,18 @@ class SubscriptionsController
      */
     private $user;
 
+    /**
+     * @var FixedProductsRepository
+     */
+    private $productsRepo;
+
     public function __construct(ContainerInterface $container)
     {
         $this->view = $container->get('view');
         $this->subsRepo = new ArraySubscriptionsRepository(
             $_SESSION['data']['subscriptions'] ?? []
         );
+        $this->productsRepo = new FixedProductsRepository();
         $this->user = new User(1, $this->subsRepo);
     }
 
@@ -102,7 +109,8 @@ class SubscriptionsController
         }
 
         return $this->view->render($response, 'create.phtml', [
-            'form' =>$form
+            'form' => $form,
+            'products' => $this->productsRepo->findAll(),
         ]);
     }
 
