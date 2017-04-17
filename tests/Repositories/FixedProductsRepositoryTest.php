@@ -26,7 +26,7 @@ class FixedProductsRepositoryTest extends TestCase
     /**
      * Репозиторий возвращает модель определенного товара
      * @param Product $specificProduct
-     * @dataProvider findAllReturnSpecificProductDataProvider
+     * @dataProvider productsDataProvider
      */
     public function testFindAllReturnSpecificProduct(Product $specificProduct)
     {
@@ -37,7 +37,31 @@ class FixedProductsRepositoryTest extends TestCase
         $this->assertContains($specificProduct, $products, '', false, false);
     }
 
-    public function findAllReturnSpecificProductDataProvider()
+    /**
+     * При поиске по имени должна возвращаться модель с тем же именем
+     * @param Product $product
+     * @dataProvider productsDataProvider
+     */
+    public function testFindByNameShouldReturnProductWithTheSameNameAsRequested(Product $product) {
+        $repo = new FixedProductsRepository();
+
+        $foundProduct = $repo->findByName($product->name);
+
+        $this->assertEquals($product, $foundProduct);
+    }
+
+
+    public function testFindByNameShouldReturnNullIfProductWithRequestedNameDoesNotExist()
+    {
+        $repo = new FixedProductsRepository();
+        $nonexistentName = 'Футбольный мяч';
+
+        $product = $repo->findByName($nonexistentName);
+
+        $this->assertNull($product);
+    }
+
+    public function productsDataProvider()
     {
         return [
             [new Product('Бритвенный станок', 1)],
