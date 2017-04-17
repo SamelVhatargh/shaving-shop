@@ -111,6 +111,35 @@ class SubscriptionsController
         return $this->view->render($response, 'create.phtml', [
             'form' => $form,
             'products' => $this->productsRepo->findAll(),
+            'action' => 'Добавление',
+        ]);
+    }
+
+    /**
+     * Отображает форму смены подписки и сохраняет ее если нужно
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
+    public function update(RequestInterface $request, ResponseInterface $response)
+    {
+        $activeSubscription = $this->user->getActiveSubscription();
+        $form = new SubscriptionForm($this->user, $this->productsRepo);
+
+
+        $form->populateFromPostRequest($request);
+        if ($form->isSubmitted()) {
+            $this->user->cancelSubscription($activeSubscription);
+            $this->subsRepo->save($form->createSubscription());
+            $this->updateSessionStorage();
+            return $response->withRedirect('/', 301);
+        }
+        $form->populateFromSubscription($activeSubscription);
+
+        return $this->view->render($response, 'create.phtml', [
+            'form' => $form,
+            'products' => $this->productsRepo->findAll(),
+            'action' => 'Смена',
         ]);
     }
 

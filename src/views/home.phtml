@@ -19,7 +19,8 @@ use ShavingShop\Models\Subscription;
             начиная с <?= $activeSubscription->getPeriod()->getStartDate()->format('d.m.Y'); ?>
 
             <br>
-            <a href="/clear/<?= $activeSubscription->getId(); ?>">Отменить подписку</a>
+            <a href="/clear/<?= $activeSubscription->getId(); ?>">Отменить подписку</a><br>
+            <a href="/update">Сменить подписку</a>
         </p>
     <?php else : ?>
         <p>

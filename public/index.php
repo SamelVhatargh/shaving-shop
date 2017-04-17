@@ -49,4 +49,6 @@ $app->get('/clear/{id}', SubscriptionsController::class . ':clear');
 $app->get('/restore', SubscriptionsController::class . ':restore');
 $app->get('/create', SubscriptionsController::class . ':create');
 $app->post('/create', SubscriptionsController::class . ':create');
+$app->get('/update', SubscriptionsController::class . ':update');
+$app->post('/update', SubscriptionsController::class . ':update');
 $app->run();
