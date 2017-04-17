@@ -49,7 +49,7 @@ class SubscriptionFormTest extends TestCase
         );
         return [
             [$subscription, $subscription->getDelivery()->getDeliveryDay(), 'deliveryDay'],
-            [$subscription, $subscription->getProduct()->name, 'name'],
+            [$subscription, $subscription->getProduct()->name, 'product'],
         ];
     }
 
@@ -76,7 +76,7 @@ class SubscriptionFormTest extends TestCase
     public function postDataProvider() {
         return [
             ['day', 'deliveryDay'],
-            ['product', 'name'],
+            ['product', 'product'],
         ];
     }
 
@@ -130,8 +130,8 @@ class SubscriptionFormTest extends TestCase
     public function testCreateSubscriptionShouldHaveProductFromForm()
     {
         $form = $this->createForm();
-        $form->name = 'Бритвенный станок + гель для бритья';
-        $product = (new FixedProductsRepository())->findByName($form->name);
+        $form->product = 'Бритвенный станок + гель для бритья';
+        $product = (new FixedProductsRepository())->findByName($form->product);
 
         $subscription = $form->createSubscription();
 

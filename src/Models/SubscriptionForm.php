@@ -29,7 +29,7 @@ class SubscriptionForm
     /**
      * @var string
      */
-    public $name = '';
+    public $product = '';
 
     /**
      * @var ProductsRepositoryInterface
@@ -57,7 +57,7 @@ class SubscriptionForm
         if ($request->isPost()) {
             $data = $request->getParsedBodyParam('Subscription', false);
             $this->deliveryDay = $data['day'] ?? '';
-            $this->name = $data['product'] ?? '';
+            $this->product = $data['product'] ?? '';
 
             $this->submitted = true;
         }
@@ -69,7 +69,7 @@ class SubscriptionForm
      */
     public function populateFromSubscription(Subscription $subscription) {
         $this->deliveryDay = $subscription->getDelivery()->getDeliveryDay();
-        $this->name = $subscription->getProduct()->name;
+        $this->product = $subscription->getProduct()->name;
     }
 
     /**
@@ -87,7 +87,7 @@ class SubscriptionForm
      */
     public function createSubscription(): Subscription
     {
-        $product = $this->productsRepository->findByName($this->name);
+        $product = $this->productsRepository->findByName($this->product);
         $subscription = SubscriptionFactory::createByRow([
             'id' => null,
             'name' => $product->name ?? '',
