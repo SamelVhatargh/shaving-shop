@@ -5,6 +5,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 use ShavingShop\Models\SubscriptionForm;
 use PHPUnit\Framework\TestCase;
 use ShavingShop\Models\User;
+use ShavingShop\Repositories\FixedProductsRepository;
 use ShavingShop\Repositories\SubscriptionRepositoryInterface;
 use ShavingShop\Utils\DateTime;
 use Slim\Http\Request;
@@ -17,10 +18,11 @@ class SubscriptionFormTest extends TestCase
 
     /**
      * Поля формы должны заполнятся из POST-данных запроса
+     * @dataProvider postDataProvider
      */
-    public function testFormFieldsShouldPopulateFromPostData()
+    public function testFormFieldsShouldPopulateFromPostData($postField, $formField)
     {
-        $postData = ['day' => 3];
+        $postData = [$postField => 3];
         $request = $this->getRequestMock();
         $request->expects($this->once())
             ->method('getParsedBodyParam')
@@ -31,7 +33,14 @@ class SubscriptionFormTest extends TestCase
 
         $form->populateFromPostRequest($request);
 
-        $this->assertEquals($postData['day'], $form->deliveryDay);
+        $this->assertEquals($postData[$postField], $form->$formField);
+    }
+
+    public function postDataProvider() {
+        return [
+            ['day', 'deliveryDay'],
+            ['product', 'name'],
+        ];
     }
 
     /**
@@ -79,6 +88,20 @@ class SubscriptionFormTest extends TestCase
     }
 
     /**
+     * Модель подписки созданная формой должна содержать указанный в форме товар
+     */
+    public function testCreateSubscriptionShouldHaveProductFromForm()
+    {
+        $form = $this->createForm();
+        $form->name = 'Бритвенный станок + гель для бритья';
+        $product = (new FixedProductsRepository())->findByName($form->name);
+
+        $subscription = $form->createSubscription();
+
+        $this->assertEquals($product, $subscription->getProduct());
+    }
+
+    /**
      * Модель подписки созданная формой должна иметь сегодняшюю дату в качестве
      * даты начала подписки
      */
@@ -117,7 +140,7 @@ class SubscriptionFormTest extends TestCase
         $rep = $this->getMockBuilder(SubscriptionRepositoryInterface::class)
             ->getMock();
         $user = new User(1, $rep);
-        return new SubscriptionForm($user);
+        return new SubscriptionForm($user, new FixedProductsRepository());
     }
 
     /**

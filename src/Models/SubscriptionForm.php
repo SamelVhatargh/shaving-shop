@@ -1,6 +1,7 @@
 <?php
 namespace ShavingShop\Models;
 
+use ShavingShop\Repositories\ProductsRepositoryInterface;
 use ShavingShop\Utils\DateTime;
 use Slim\Http\Request;
 
@@ -26,12 +27,24 @@ class SubscriptionForm
     private $submitted = false;
 
     /**
+     * @var string
+     */
+    public $name = '';
+
+    /**
+     * @var ProductsRepositoryInterface
+     */
+    private $productsRepository;
+
+    /**
      * SubscriptionForm constructor.
      * @param User $user
+     * @param ProductsRepositoryInterface $productsRepository
      */
-    public function __construct(User $user)
+    public function __construct(User $user, ProductsRepositoryInterface $productsRepository)
     {
         $this->user = $user;
+        $this->productsRepository = $productsRepository;
     }
 
 
@@ -44,6 +57,7 @@ class SubscriptionForm
         if ($request->isPost()) {
             $data = $request->getParsedBodyParam('Subscription', false);
             $this->deliveryDay = $data['day'] ?? '';
+            $this->name = $data['product'] ?? '';
 
             $this->submitted = true;
         }
@@ -64,10 +78,11 @@ class SubscriptionForm
      */
     public function createSubscription(): Subscription
     {
+        $product = $this->productsRepository->findByName($this->name);
         $subscription = SubscriptionFactory::createByRow([
             'id' => null,
-            'name' => 'Бритвенный станок станок',
-            'cost' => '1',
+            'name' => $product->name ?? '',
+            'cost' => $product->cost ?? 0,
             'start_date' => DateTime::now()->format('Y-m-d H:i:s'),
             'end_date' => null,
             'delivery_day' => $this->deliveryDay,

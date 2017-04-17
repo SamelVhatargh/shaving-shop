@@ -99,7 +99,7 @@ class SubscriptionsController
      */
     public function create(RequestInterface $request, ResponseInterface $response)
     {
-        $form = new SubscriptionForm($this->user);
+        $form = new SubscriptionForm($this->user, $this->productsRepo);
 
         $form->populateFromPostRequest($request);
         if ($form->isSubmitted()) {
