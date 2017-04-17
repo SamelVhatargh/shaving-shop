@@ -64,6 +64,15 @@ class SubscriptionForm
     }
 
     /**
+     * Заполняет форму данными с существующей подписки
+     * @param Subscription $subscription
+     */
+    public function populateFromSubscription(Subscription $subscription) {
+        $this->deliveryDay = $subscription->getDelivery()->getDeliveryDay();
+        $this->name = $subscription->getProduct()->name;
+    }
+
+    /**
      * Была ли отправлена форма
      * @return bool
      */

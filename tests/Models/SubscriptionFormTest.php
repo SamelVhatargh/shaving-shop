@@ -2,6 +2,8 @@
 namespace ShavingShop\Tests\Models;
 
 use PHPUnit_Framework_MockObject_MockObject;
+use ShavingShop\Models\Subscription;
+use ShavingShop\Models\SubscriptionFactory;
 use ShavingShop\Models\SubscriptionForm;
 use PHPUnit\Framework\TestCase;
 use ShavingShop\Models\User;
@@ -15,6 +17,41 @@ use Slim\Http\Request;
  */
 class SubscriptionFormTest extends TestCase
 {
+
+
+    /**
+     * @param Subscription $subscription
+     * @param $expected
+     * @param $formField
+     * @dataProvider subscriptionPopulateDataProvider
+     */
+    public function testFormFieldsShouldPopulateFromSubscription(Subscription $subscription, $expected, $formField)
+    {
+        $form = $this->createForm();
+
+        $form->populateFromSubscription($subscription);
+
+        $this->assertEquals($expected, $form->$formField);
+    }
+
+    public function subscriptionPopulateDataProvider()
+    {
+        $subscription = SubscriptionFactory::createByRow(
+            [
+                'id' => 1,
+                'name' => 'Кружка',
+                'cost' => 100,
+                'user_id' => '1',
+                'end_date' => null,
+                'start_date' => '2017-01-05 12:01:45',
+                'delivery_day' => '1',
+            ]
+        );
+        return [
+            [$subscription, $subscription->getDelivery()->getDeliveryDay(), 'deliveryDay'],
+            [$subscription, $subscription->getProduct()->name, 'name'],
+        ];
+    }
 
     /**
      * Поля формы должны заполнятся из POST-данных запроса
