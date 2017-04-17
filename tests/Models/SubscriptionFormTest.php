@@ -111,7 +111,7 @@ class SubscriptionFormTest extends TestCase
     /**
      * Модель подписки созданная формой должна содержать указанный в форме день доставки
      */
-    public function testCreateSubscriptionShouldHaveDeliveryDayFromForm()
+    public function testCreatedSubscriptionShouldHaveDeliveryDayFromForm()
     {
         $form = $this->createForm();
         $form->deliveryDay = '2';
@@ -127,7 +127,7 @@ class SubscriptionFormTest extends TestCase
     /**
      * Модель подписки созданная формой должна содержать указанный в форме товар
      */
-    public function testCreateSubscriptionShouldHaveProductFromForm()
+    public function testCreatedSubscriptionShouldHaveProductFromForm()
     {
         $form = $this->createForm();
         $form->product = 'Бритвенный станок + гель для бритья';
