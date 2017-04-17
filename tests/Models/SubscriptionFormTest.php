@@ -63,9 +63,9 @@ class SubscriptionFormTest extends TestCase
     }
 
     /**
-     * Модель подписки созданная формой должна содержать значения с формы
+     * Модель подписки созданная формой должна содержать указанный в форме день доставки
      */
-    public function testCreateSubscriptionShouldReturnSubscriptionModelBasedOnFormFields()
+    public function testCreateSubscriptionShouldHaveDeliveryDayFromForm()
     {
         $form = $this->createForm();
         $form->deliveryDay = '2';
