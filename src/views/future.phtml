@@ -1,0 +1,39 @@
+<?php
+use ShavingShop\Models\Subscription;
+use ShavingShop\Utils\DateTime;
+
+/* @var Subscription[] $subscriptions текущая подписка */
+
+
+$now = DateTime::now();
+$halfYearFromNow = DateTime::now()->add(new DateInterval('P6M'));
+?>
+<html>
+<head>
+    <title>Сервис продажи бритвенных станков</title>
+</head>
+<body>
+    <h1>Сервис продажи бритвенных станков</h1>
+
+    <?php foreach ($subscriptions as $subscription) : ?>
+    <?php
+    $cost = $subscription->getProduct()->cost;
+    $product = $subscription->getProduct()->name;
+    $totalCost = 0;
+    ?>
+    <h2>Будущие поставки "<?= $product; ?>"</h2>
+        <p>
+            <?php $dates = $subscription->getDelivery()->getDeliveryDates(
+                $now,
+                $halfYearFromNow
+            ); ?>
+            <?php foreach ($dates as $date) : ?>
+                <?= $date->format('d.m.Y'); ?> - <?= $cost; ?>$<br>
+                <?php $totalCost += $cost; ?>
+            <?php endforeach; ?>
+            Итого будет потрачено: <?= $totalCost ?>$
+        </p>
+    <?php endforeach; ?>
+    <a href="/">Активная подписка</a>
+</body>
+</html>

@@ -47,6 +47,7 @@ $container['view'] = function ($container) {
 
 $app->get('/', SubscriptionsController::class . ':active');
 $app->get('/history', SubscriptionsController::class . ':history');
+$app->get('/future', SubscriptionsController::class . ':future');
 $app->get('/clear/{id}', SubscriptionsController::class . ':clear');
 $app->get('/restore', SubscriptionsController::class . ':restore');
 $app->get('/create', SubscriptionsController::class . ':create');

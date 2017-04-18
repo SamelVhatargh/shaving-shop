@@ -77,6 +77,18 @@ class SubscriptionsController
             'subscriptions' => $this->user->getSubscriptions()
         ]);
     }
+    /**
+     * История доставок
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
+    public function future(RequestInterface $request, ResponseInterface $response)
+    {
+        return $this->view->render($response, 'future.phtml', [
+            'subscriptions' => [$this->user->getActiveSubscription()]
+        ]);
+    }
 
     /**
      * Отмена подписки
