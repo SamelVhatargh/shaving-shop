@@ -16,7 +16,9 @@ function restore(): void
             'user_id' => '1',
             'end_date' => null,
             'start_date' => '2017-01-05 12:01:45',
+            'delivery_type' => 'oncePerMonth',
             'delivery_day' => '3',
+            'delivery_second_day_or_month' => null,
         ]
     ];
 }

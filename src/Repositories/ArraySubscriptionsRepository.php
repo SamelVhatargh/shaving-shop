@@ -131,7 +131,9 @@ class ArraySubscriptionsRepository implements SubscriptionRepositoryInterface
             'name' => $subscription->getProduct()->name,
             'cost' => $subscription->getProduct()->cost,
             'start_date' => $subscription->getPeriod()->getStartDate()->format('Y-m-d H:i:s'),
+            'delivery_type' => $subscription->getDelivery()->getId(),
             'delivery_day' => $subscription->getDelivery()->getDeliveryDay(),
+            'delivery_second_day_or_month' => $subscription->getDelivery()->getSecondDeliveryDayOrMonth(),
         ];
         return $row;
     }
