@@ -14,6 +14,12 @@ class DeliveryFactory
                 $row['delivery_second_day_or_month']
             );
         }
+        if ($row['delivery_type'] === 'oncePerTwoMonth') {
+            return new OncePerTwoMonthsDelivery(
+                $row['delivery_day'],
+                $row['delivery_second_day_or_month'] & 1
+            );
+        }
         return new OncePerMonthDelivery($row['delivery_day']);
     }
 }
