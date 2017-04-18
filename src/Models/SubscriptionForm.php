@@ -17,6 +17,16 @@ class SubscriptionForm
     public $deliveryDay = 1;
 
     /**
+     * @var string тип доставки
+     */
+    public $deliveryType = 'oncePerMonth';
+
+    /**
+     * @var int второй день доставки или четность месяца
+     */
+    public $deliverySecondDayOrMonth;
+
+    /**
      * @var User
      */
     private $user;
@@ -57,6 +67,8 @@ class SubscriptionForm
         if ($request->isPost()) {
             $data = $request->getParsedBodyParam('Subscription', false);
             $this->deliveryDay = $data['day'] ?? '';
+            $this->deliveryType = $data['type'] ?? 'oncePerMonth';
+            $this->deliverySecondDayOrMonth = $data['secondDay'] ?? null;
             $this->product = $data['product'] ?? '';
 
             $this->submitted = true;

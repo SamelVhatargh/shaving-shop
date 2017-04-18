@@ -2,6 +2,7 @@
 namespace ShavingShop\Tests\Models;
 
 use PHPUnit_Framework_MockObject_MockObject;
+use ShavingShop\Models\Deliveries\OncePerMonthDelivery;
 use ShavingShop\Models\Subscription;
 use ShavingShop\Models\SubscriptionFactory;
 use ShavingShop\Models\SubscriptionForm;
@@ -44,11 +45,15 @@ class SubscriptionFormTest extends TestCase
                 'user_id' => '1',
                 'end_date' => null,
                 'start_date' => '2017-01-05 12:01:45',
+                'delivery_type' => 'oncePerMonth',
                 'delivery_day' => '1',
+                'delivery_second_day_or_month' => null,
             ]
         );
         return [
             [$subscription, $subscription->getDelivery()->getDeliveryDay(), 'deliveryDay'],
+            [$subscription, $subscription->getDelivery()->getId(), 'deliveryType'],
+            [$subscription, $subscription->getDelivery()->getSecondDeliveryDayOrMonth(), 'deliverySecondDayOrMonth'],
             [$subscription, $subscription->getProduct()->name, 'product'],
         ];
     }
@@ -76,6 +81,8 @@ class SubscriptionFormTest extends TestCase
     public function postDataProvider() {
         return [
             ['day', 'deliveryDay'],
+            ['type', 'deliveryType'],
+            ['secondDay', 'deliverySecondDayOrMonth'],
             ['product', 'product'],
         ];
     }
@@ -121,6 +128,22 @@ class SubscriptionFormTest extends TestCase
         $this->assertEquals(
             $form->deliveryDay,
             $subscription->getDelivery()->getDeliveryDay()
+        );
+    }
+
+    /**
+     * Модель подписки созданная формой должна содержать указанный в форме тип доставки
+     */
+    public function testCreatedSubscriptionShouldHaveDeliveryTypeFromForm()
+    {
+        $form = $this->createForm();
+        $form->deliveryType = 'oncePerMonth';
+
+        $subscription = $form->createSubscription();
+
+        $this->assertInstanceOf(
+            OncePerMonthDelivery::class,
+            $subscription->getDelivery()
         );
     }
 
