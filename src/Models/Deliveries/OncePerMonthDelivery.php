@@ -76,4 +76,22 @@ class OncePerMonthDelivery implements DeliveryInterface
     {
         return $this->day;
     }
+
+    /**
+     * Возвращает идентификатор типа доставки
+     * @return string
+     */
+    public function getId(): string
+    {
+        return 'oncePerMonth';
+    }
+
+    /**
+     * Возвращает второй день доставки или четность месяца доставки
+     * @return int
+     */
+    public function getSecondDeliveryDayOrMonth(): ?int
+    {
+        return null;
+    }
 }

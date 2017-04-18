@@ -10,6 +10,12 @@ interface DeliveryInterface
 {
 
     /**
+     * Возвращает идентификатор типа доставки
+     * @return string
+     */
+    public function getId(): string;
+
+    /**
      * Возвращает словесное описание доставки
      * @return string
      */
@@ -29,4 +35,10 @@ interface DeliveryInterface
      * @return int
      */
     public function getDeliveryDay(): int;
+
+    /**
+     * Возвращает второй день доставки или четность месяца доставки
+     * @return int
+     */
+    public function getSecondDeliveryDayOrMonth(): ?int;
 }
