@@ -106,7 +106,9 @@ class SubscriptionForm
             'cost' => $product->cost ?? 0,
             'start_date' => DateTime::now()->format('Y-m-d H:i:s'),
             'end_date' => null,
+            'delivery_type' => 'oncePerMonth',
             'delivery_day' => $this->deliveryDay,
+            'delivery_second_day_or_month' => null,
             'user_id' => $this->user->getId(),
         ]);
         return $subscription;
