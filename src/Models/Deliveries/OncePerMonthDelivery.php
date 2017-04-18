@@ -94,4 +94,13 @@ class OncePerMonthDelivery implements DeliveryInterface
     {
         return null;
     }
+
+    /**
+     * Возвращает словесное описание типа доставки
+     * @return string
+     */
+    public function getLabel(): string
+    {
+        return 'Один раз в месяц';
+    }
 }

@@ -21,6 +21,11 @@ interface DeliveryInterface
      */
     public function getDescription(): string;
 
+    /**
+     * Возвращает словесное описание типа доставки
+     * @return string
+     */
+    public function getLabel(): string;
 
     /**
      * Возвращает массив с датами доставки в указанном периоде
