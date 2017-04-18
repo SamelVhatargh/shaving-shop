@@ -46,9 +46,9 @@ class SubscriptionFormTest extends TestCase
                 'user_id' => '1',
                 'end_date' => null,
                 'start_date' => '2017-01-05 12:01:45',
-                'delivery_type' => 'oncePerMonth',
+                'delivery_type' => 'twicePerMonth',
                 'delivery_day' => '1',
-                'delivery_second_day_or_month' => null,
+                'delivery_second_day_or_month' => '3',
             ]
         );
         return [

@@ -81,6 +81,8 @@ class SubscriptionForm
      */
     public function populateFromSubscription(Subscription $subscription) {
         $this->deliveryDay = $subscription->getDelivery()->getDeliveryDay();
+        $this->deliveryType = $subscription->getDelivery()->getId();
+        $this->deliverySecondDayOrMonth = $subscription->getDelivery()->getSecondDeliveryDayOrMonth();
         $this->product = $subscription->getProduct()->name;
     }
 
