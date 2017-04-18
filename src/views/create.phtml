@@ -1,9 +1,11 @@
 <?php
+use ShavingShop\Models\Deliveries\DeliveryInterface;
 use ShavingShop\Models\Product;
 use ShavingShop\Models\SubscriptionForm;
 
 /* @var SubscriptionForm $form */
 /* @var Product[] $products */
+/* @var DeliveryInterface[] $deliveries */
 /* @var string $action */
 ?>
 <html>
@@ -22,12 +24,15 @@ use ShavingShop\Models\SubscriptionForm;
             <?php endforeach; ?>
         </select>
         <br>
-        <label for="delivery">Доставка:</label>
-        <select id="delivery" name="Subscription[delivery]">
-            <option>Один раз в месяц</option>
+        <label for="type">Доставка:</label>
+        <select id="type" name="Subscription[type]">
+            <?php foreach ($deliveries as $delivery) : ?>
+                <option value="<?= $delivery->getId(); ?>" <?= $form->deliveryType === $delivery->getId() ? ' selected' : ''; ?>>Один раз в месяц</option>
+            <?php endforeach; ?>
         </select>
         <br>
         <label for="day">День:</label><input id="day" name="Subscription[day]" value="<?= $form->deliveryDay; ?>">
+        <label for="secondDay">Второй день:</label><input id="secondDay" name="Subscription[secondDay]" value="<?= $form->deliverySecondDayOrMonth; ?>">
         <br>
         <input type="submit" value="Оформить подписку">
     </form>

@@ -4,6 +4,8 @@ namespace ShavingShop\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ShavingShop\Models\Deliveries\DeliveryInterface;
+use ShavingShop\Models\Deliveries\OncePerMonthDelivery;
 use ShavingShop\Models\SubscriptionForm;
 use ShavingShop\Models\User;
 use ShavingShop\Repositories\ArraySubscriptionsRepository;
@@ -111,6 +113,7 @@ class SubscriptionsController
         return $this->view->render($response, 'create.phtml', [
             'form' => $form,
             'products' => $this->productsRepo->findAll(),
+            'deliveries' => $this->getAvailableDeliveries(),
             'action' => 'Добавление',
         ]);
     }
@@ -139,6 +142,7 @@ class SubscriptionsController
         return $this->view->render($response, 'create.phtml', [
             'form' => $form,
             'products' => $this->productsRepo->findAll(),
+            'deliveries' => $this->getAvailableDeliveries(),
             'action' => 'Смена',
         ]);
     }
@@ -155,5 +159,16 @@ class SubscriptionsController
     private function updateSessionStorage(): void
     {
         $_SESSION['data']['subscriptions'] = $this->subsRepo->getData();
+    }
+
+    /**
+     * Возвращает доступные виды доставки
+     * @return DeliveryInterface[]
+     */
+    private function getAvailableDeliveries(): array
+    {
+        return [
+            new OncePerMonthDelivery(1),
+        ];
     }
 }
