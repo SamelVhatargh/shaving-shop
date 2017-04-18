@@ -6,6 +6,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ShavingShop\Models\Deliveries\DeliveryInterface;
 use ShavingShop\Models\Deliveries\OncePerMonthDelivery;
+use ShavingShop\Models\Deliveries\TwicePerMonthDelivery;
 use ShavingShop\Models\SubscriptionForm;
 use ShavingShop\Models\User;
 use ShavingShop\Repositories\ArraySubscriptionsRepository;
@@ -169,6 +170,7 @@ class SubscriptionsController
     {
         return [
             new OncePerMonthDelivery(1),
+            new TwicePerMonthDelivery(1, 2),
         ];
     }
 }
