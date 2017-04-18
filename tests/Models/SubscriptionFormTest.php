@@ -3,6 +3,7 @@ namespace ShavingShop\Tests\Models;
 
 use PHPUnit_Framework_MockObject_MockObject;
 use ShavingShop\Models\Deliveries\OncePerMonthDelivery;
+use ShavingShop\Models\Deliveries\TwicePerMonthDelivery;
 use ShavingShop\Models\Subscription;
 use ShavingShop\Models\SubscriptionFactory;
 use ShavingShop\Models\SubscriptionForm;
@@ -145,6 +146,22 @@ class SubscriptionFormTest extends TestCase
             OncePerMonthDelivery::class,
             $subscription->getDelivery()
         );
+    }
+
+    /**
+     * Модель подписки созданная формой должна создавать корректную доставку
+     */
+    public function testCreatedSubscriptionShouldCreateValidDeliveryFromPostFields()
+    {
+        $delivery = new TwicePerMonthDelivery(1, 2);
+        $form = $this->createForm();
+        $form->deliveryType = $delivery->getId();
+        $form->deliveryDay = $delivery->getDeliveryDay();
+        $form->deliverySecondDayOrMonth = $delivery->getSecondDeliveryDayOrMonth();
+
+        $subscription = $form->createSubscription();
+
+        $this->assertEquals($delivery, $subscription->getDelivery());
     }
 
     /**
